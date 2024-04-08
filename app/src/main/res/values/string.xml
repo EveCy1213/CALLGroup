@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="username">Username</string>
+        <string name="password">Password</string>
+        <string name="login">Log In</string>
+        <string name="login_as_student">Student</string>
+        <string name="login_as_lecturer">Lecturer</string>
+        <string name="forget_password">Forget Password</string>
+        <string name="email">Email</string>
+        <string name="register">Register</string>
+        <string name="confirm_password">Confirm Password</string>
+
+</resources>

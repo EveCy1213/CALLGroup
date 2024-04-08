@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "702927801232",
+    "project_id": "callgroup-25079",
+    "storage_bucket": "callgroup-25079.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702927801232:android:1b48548ca7680bbc008115",
+        "android_client_info": {
+          "package_name": "my.edu.utar.call_group"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8tkQ9gjMf_QaJwDmb8QHa4w4_v2WirOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
