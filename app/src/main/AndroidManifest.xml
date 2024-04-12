@@ -17,20 +17,14 @@
         <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
-        <activity
-            android:name=".Calander"
-            android:exported="false" />
+
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".CourseSelection"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".LecturerActivity"
@@ -41,6 +35,13 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
     </application>
 

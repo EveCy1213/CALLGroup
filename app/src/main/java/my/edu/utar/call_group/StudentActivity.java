@@ -20,7 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,6 +51,7 @@ public class StudentActivity extends AppCompatActivity {
 
         tableLayout = findViewById(R.id.tableLayout);
         weekListView = findViewById(R.id.weekListView);
+        fetchUserSelectedCourses();
 
         ArrayList<String> weeks = new ArrayList<>();
         for (int i = 1; i <= 14; i++) {
@@ -75,51 +80,21 @@ public class StudentActivity extends AppCompatActivity {
     }
 
     private void loadTimetableForWeek(final String selectedWeek) {
+        // Check if any courses are selected
+        if (selectedCourses == null || selectedCourses.isEmpty()) {
+            Toast.makeText(this, "No courses selected to display timetable.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // Clear the existing timetable views
         tableLayout.removeAllViews();
 
-        TableRow headerRow = new TableRow(this);
-        String[] daysOfWeek = {"Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
-        for (String day : daysOfWeek) {
-            TextView dayTextView = new TextView(this);
-            dayTextView.setText(day);
-            dayTextView.setGravity(Gravity.CENTER);
+        // Add header row with days of the week
+        addHeaderRow();
 
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-            dayTextView.setLayoutParams(params);
-            headerRow.addView(dayTextView);
-        }
-        tableLayout.addView(headerRow);
-
-
-        String[] timeSlots = {"8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-                "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM"};
-        for (String timeSlot : timeSlots) {
-            TableRow row = new TableRow(this);
-            row.setGravity(Gravity.CENTER_VERTICAL);
-            TextView timeTextView = new TextView(this);
-            timeTextView.setText(timeSlot);
-            timeTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-            row.addView(timeTextView);
-
-
-            for (int i = 0; i < daysOfWeek.length - 1; i++) {
-                TextView emptyTextView = new TextView(this);
-                emptyTextView.setText("");
-                emptyTextView.setGravity(Gravity.CENTER);
-                // Set fixed width for column
-                TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
-                emptyTextView.setLayoutParams(params);
-                row.addView(emptyTextView);
-            }
-
-            TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, convertDpToPixel(100));
-            row.setLayoutParams(params);
-            tableLayout.addView(row);
-        }
-
-        for (final String selectedCourse : selectedCourses) {
-            String[] parts = selectedCourse.split(" - ");
+        // Loop through each selected course and query timetable details from Firestore
+        for (String course : selectedCourses) {
+            String[] parts = course.split(" - ");
             final String courseCode = parts[0].trim();
             final String courseName = parts[1].trim();
 
@@ -135,15 +110,56 @@ public class StudentActivity extends AppCompatActivity {
                                     String startTime = document.getString("Start Time");
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
-                                    updateTimetable(startTime, endTime, day, selectedCourse);
+                                    updateTimetable(startTime, endTime, day, courseName);
                                 }
                             } else {
-                                Toast.makeText(StudentActivity.this, "Failed to fetch course details for " + selectedCourse, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(StudentActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         }
     }
+
+    private void addHeaderRow() {
+        TableRow headerRow = new TableRow(this);
+        String[] daysOfWeek = {"Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        for (String day : daysOfWeek) {
+            TextView dayTextView = new TextView(this);
+            dayTextView.setText(day);
+            dayTextView.setGravity(Gravity.CENTER);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            dayTextView.setLayoutParams(params);
+            headerRow.addView(dayTextView);
+        }
+        tableLayout.addView(headerRow);
+
+        // Add rows for each time slot with empty placeholders for course data
+        String[] timeSlots = {"8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
+                "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM"};
+        for (String timeSlot : timeSlots) {
+            TableRow row = new TableRow(this);
+            row.setGravity(Gravity.CENTER_VERTICAL);
+            TextView timeTextView = new TextView(this);
+            timeTextView.setText(timeSlot);
+            timeTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            row.addView(timeTextView);
+
+            // Add empty cells for each day
+            for (int i = 0; i < daysOfWeek.length - 1; i++) {
+                TextView emptyTextView = new TextView(this);
+                emptyTextView.setText("");
+                emptyTextView.setGravity(Gravity.CENTER);
+                TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                emptyTextView.setLayoutParams(cellParams);
+                row.addView(emptyTextView);
+            }
+
+            TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, convertDpToPixel(100));
+            row.setLayoutParams(rowParams);
+            tableLayout.addView(row);
+        }
+    }
+
 
 
     private int convertDpToPixel(int dp) {
@@ -233,4 +249,31 @@ public class StudentActivity extends AppCompatActivity {
 
         return rowIndex;
     }
+
+    private void fetchUserSelectedCourses() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("Users").document(user.getUid())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists() && documentSnapshot.contains("courses")) {
+                                selectedCourses = (ArrayList<String>) documentSnapshot.get("courses");
+                                // Now with selectedCourses updated, you can proceed to use them in your app
+                            } else {
+                                Toast.makeText(StudentActivity.this, "No courses selected", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(StudentActivity.this, "Failed to fetch user courses", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
 }

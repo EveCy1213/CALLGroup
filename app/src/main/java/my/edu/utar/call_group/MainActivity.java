@@ -17,6 +17,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private EditText username_edit_text;
@@ -62,49 +66,96 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void login_check(){
-        String username=username_edit_text.getText().toString();
-        String password=password_edit_text.getText().toString();
+//    private void login_check(){
+//        String username=username_edit_text.getText().toString();
+//        String password=password_edit_text.getText().toString();
+//
+//        if(username.isEmpty())
+//        {
+//            Toast.makeText(MainActivity.this, "Enter Email.",
+//                    Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        else if(password.isEmpty())
+//        {
+//            Toast.makeText(MainActivity.this, "Enter Password.",
+//                    Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        mAuth.signInWithEmailAndPassword(username, password)
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            username_edit_text.setText("");
+//                            password_edit_text.setText("");
+//
+//                            int checkedId = login_group.getCheckedRadioButtonId();
+//
+//                            if (checkedId == R.id.login_as_student) {
+//                                Intent studentIntent = new Intent(MainActivity.this, CourseSelection.class);
+//                                studentIntent.putExtra("userRole","student");
+//                                startActivity(studentIntent);
+//                            } else if (checkedId == R.id.login_as_lecturer) {
+//                                Intent lecturerIntent = new Intent(MainActivity.this, CourseSelection.class);
+//                                lecturerIntent.putExtra("userRole","lecturer");
+//                                startActivity(lecturerIntent);
+//                            }
+//                        } else {
+//                            username_edit_text.setText("");
+//                            password_edit_text.setText("");
+//                            Toast.makeText(MainActivity.this, "Authentication fail.",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
+private void login_check() {
+    String username = username_edit_text.getText().toString().trim();
+    String password = password_edit_text.getText().toString().trim();
 
-        if(username.isEmpty())
-        {
-            Toast.makeText(MainActivity.this, "Enter Email.",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        else if(password.isEmpty())
-        {
-            Toast.makeText(MainActivity.this, "Enter Password.",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
+    if (username.isEmpty()) {
+        Toast.makeText(MainActivity.this, "Enter Email.", Toast.LENGTH_SHORT).show();
+        return;
+    } else if (password.isEmpty()) {
+        Toast.makeText(MainActivity.this, "Enter Password.", Toast.LENGTH_SHORT).show();
+        return;
+    }
 
-        mAuth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            username_edit_text.setText("");
-                            password_edit_text.setText("");
-
-                            int checkedId = login_group.getCheckedRadioButtonId();
-
-                            if (checkedId == R.id.login_as_student) {
-                                Intent studentIntent = new Intent(MainActivity.this, CourseSelection.class);
-                                studentIntent.putExtra("userRole","student");
-                                startActivity(studentIntent);
-                            } else if (checkedId == R.id.login_as_lecturer) {
-                                Intent lecturerIntent = new Intent(MainActivity.this, CourseSelection.class);
-                                lecturerIntent.putExtra("userRole","lecturer");
-                                startActivity(lecturerIntent);
-                            }
-                        } else {
-                            username_edit_text.setText("");
-                            password_edit_text.setText("");
-                            Toast.makeText(MainActivity.this, "Authentication fail.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+    mAuth.signInWithEmailAndPassword(username, password)
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        checkIfCoursesSelected(user);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+            });
+}
+
+    private void checkIfCoursesSelected(FirebaseUser user) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Users").document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null && task.getResult().exists()) {
+                    DocumentSnapshot document = task.getResult();
+                    List<String> courses = (List<String>) document.get("courses");
+                    if (courses == null || courses.isEmpty()) {
+                        // Redirect to Course Selection
+                        startActivity(new Intent(MainActivity.this, CourseSelection.class));
+                    } else {
+                        // Proceed to main activity or wherever you handle the main operations
+                    }
+                } else {
+                    // Document does not exist, redirect to Course Selection
+                    startActivity(new Intent(MainActivity.this, CourseSelection.class));
+                }
+            }
+        });
     }
 }
