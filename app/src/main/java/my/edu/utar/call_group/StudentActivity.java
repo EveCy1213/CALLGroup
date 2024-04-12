@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,7 +48,7 @@ public class StudentActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        selectedCourses = getIntent().getStringArrayListExtra("selectedCourses");
+        //selectedCourses = getIntent().getStringArrayListExtra("selectedCourses");
 
         tableLayout = findViewById(R.id.tableLayout);
         weekListView = findViewById(R.id.weekListView);
@@ -65,16 +66,21 @@ public class StudentActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedWeek = (String) parent.getItemAtPosition(position);
                 loadTimetableForWeek(selectedWeek);
-                // Collapse week list after selection
+
                 weekListView.setVisibility(View.GONE);
             }
         });
 
-        tableLayout.setOnClickListener(new View.OnClickListener() {
+        Button btnEditCourses = findViewById(R.id.editCoursesButton);
+        btnEditCourses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(StudentActivity.this, CourseSelection.class);
+                intent.putStringArrayListExtra("selectedCourses", selectedCourses);
+                intent.putExtra("sourceActivity", "StudentActivity");
+                intent.putExtra("userRole", "student");
+                startActivity(intent);
 
-                weekListView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -86,7 +92,7 @@ public class StudentActivity extends AppCompatActivity {
             return;
         }
 
-        // Clear the existing timetable views
+        // Clear the existing views
         tableLayout.removeAllViews();
 
         // Add header row with days of the week
@@ -144,7 +150,6 @@ public class StudentActivity extends AppCompatActivity {
             timeTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             row.addView(timeTextView);
 
-            // Add empty cells for each day
             for (int i = 0; i < daysOfWeek.length - 1; i++) {
                 TextView emptyTextView = new TextView(this);
                 emptyTextView.setText("");
@@ -160,14 +165,10 @@ public class StudentActivity extends AppCompatActivity {
         }
     }
 
-
-
     private int convertDpToPixel(int dp) {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-
-
     private void updateTimetable(String startTime, String endTime, String day, String course) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
@@ -261,7 +262,7 @@ public class StudentActivity extends AppCompatActivity {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if (documentSnapshot.exists() && documentSnapshot.contains("courses")) {
                                 selectedCourses = (ArrayList<String>) documentSnapshot.get("courses");
-                                // Now with selectedCourses updated, you can proceed to use them in your app
+
                             } else {
                                 Toast.makeText(StudentActivity.this, "No courses selected", Toast.LENGTH_SHORT).show();
                             }

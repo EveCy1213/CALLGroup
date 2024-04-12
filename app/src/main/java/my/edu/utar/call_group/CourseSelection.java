@@ -33,17 +33,18 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class CourseSelection extends AppCompatActivity {
-    private SearchView searchView;
     private ListView listViewCourses;
-    private ListView selectedCoursesListView;
+    private ListView listViewSelectedCourses;
     private ArrayAdapter<String> coursesAdapter;
     private ArrayAdapter<String> selectedCoursesAdapter;
     private ArrayList<String> coursesList;
     private ArrayList<String> selectedCoursesList;
     private FirebaseFirestore firestore;
+    private String userRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,142 +52,114 @@ public class CourseSelection extends AppCompatActivity {
         setContentView(R.layout.activity_course_selection);
 
         firestore = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        userRole = getIntent().getStringExtra("userRole");
 
-        if (user != null) {
-            checkExistingUserCourses(user);
-        } else {
-            startActivity(new Intent(this, MainActivity.class));
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
+            return;
         }
+
+        setupUI();
+        fetchUserCourses(user.getUid());
+
+        Button saveButton = findViewById(R.id.button_save);
+        saveButton.setOnClickListener(v -> saveUserCourses(user));
     }
 
     private void setupUI() {
-        searchView = findViewById(R.id.search_course);
         listViewCourses = findViewById(R.id.listViewCourses);
-        selectedCoursesListView = findViewById(R.id.selected_courses_list);
+        listViewSelectedCourses = findViewById(R.id.selected_courses_list);
 
         coursesList = new ArrayList<>();
         selectedCoursesList = new ArrayList<>();
 
         coursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, coursesList);
-        listViewCourses.setAdapter(coursesAdapter);
-
         selectedCoursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, selectedCoursesList);
-        selectedCoursesListView.setAdapter(selectedCoursesAdapter);
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        listViewCourses.setAdapter(coursesAdapter);
+        listViewSelectedCourses.setAdapter(selectedCoursesAdapter);
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                coursesAdapter.getFilter().filter(newText);
-                return true;
-            }
-        });
-
-        listViewCourses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCourse = coursesAdapter.getItem(position);
-                coursesAdapter.remove(selectedCourse);
-                selectedCoursesList.add(selectedCourse);
-                selectedCoursesAdapter.notifyDataSetChanged();
-            }
-        });
-
-        Button continueButton = findViewById(R.id.button_continue);
-        continueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveUserCourses();
-            }
-        });
+        listViewCourses.setOnItemClickListener((parent, view, position, id) -> handleCourseSelection(position));
+        listViewSelectedCourses.setOnItemClickListener((parent, view, position, id) -> handleCourseDeselection(position));
     }
 
-    private void fetchCourses() {
-        firestore.collection("Courses").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            String course = documentSnapshot.getString("Course Code") + " - " + documentSnapshot.getString("Course Name");
-                            coursesList.add(course);
-                        }
-                        coursesAdapter.notifyDataSetChanged();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CourseSelection.this, "Failed to retrieve courses: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void saveUserCourses() {
-        List<String> selectedCourses = new ArrayList<>(selectedCoursesAdapter.getCount());
-        for (int i = 0; i < selectedCoursesAdapter.getCount(); i++) {
-            selectedCourses.add(selectedCoursesAdapter.getItem(i));
-        }
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("Users").document(user.getUid())
-                    .set(new HashMap<String, Object>() {{
-                        put("courses", selectedCourses);
-                    }}, SetOptions.merge())
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(CourseSelection.this, "Courses saved successfully!", Toast.LENGTH_SHORT).show();
-                            redirectUserBasedOnType();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(CourseSelection.this, "Failed to save courses", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-    }
-
-    private void redirectUserBasedOnType() {
-        String userType = getIntent().getStringExtra("userRole");
-        Class<?> activityClass = "student".equals(userType) ? StudentActivity.class : LecturerActivity.class;
-        Intent intent = new Intent(CourseSelection.this, StudentActivity.class);
-        intent.putStringArrayListExtra("selectedCourses", selectedCoursesList);
-        startActivity(intent);
-        finish();
-    }
-
-    private void checkExistingUserCourses(FirebaseUser user) {
-        firestore.collection("Users").document(user.getUid()).get()
+    private void fetchUserCourses(String userId) {
+        firestore.collection("Users").document(userId).get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists() && documentSnapshot.contains("courses")) {
-                        List<String> courses = (List<String>) documentSnapshot.get("courses");
-                        if (courses != null && !courses.isEmpty()) {
-                            redirectUserBasedOnType();
-                        } else {
-                            setupUI();
-                            fetchCourses();
+                    if (documentSnapshot.exists()) {
+                        List<String> userCourses = (List<String>) documentSnapshot.get("courses");
+                        if (userCourses != null) {
+                            selectedCoursesList.addAll(userCourses);
+                            selectedCoursesAdapter.notifyDataSetChanged();
                         }
+                        fetchAllCourses();  // Fetch all courses to populate the available courses list
                     } else {
-                        setupUI();
-                        fetchCourses();
+                        // Handle new user case if no document exists
+                        fetchAllCourses();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to fetch user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    setupUI();
-                    fetchCourses();
+                    Toast.makeText(CourseSelection.this, "Failed to fetch user data", Toast.LENGTH_SHORT).show();
+                    fetchAllCourses(); // Attempt to fetch courses regardless of user data fetch failure
                 });
     }
+
+
+    private void fetchAllCourses() {
+        firestore.collection("Courses").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    HashSet<String> selectedSet = new HashSet<>(selectedCoursesList);
+                    coursesList.clear();
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        String course = documentSnapshot.getString("Course Code") + " - " + documentSnapshot.getString("Course Name");
+                        if (!selectedSet.contains(course)) {
+                            coursesList.add(course);
+                        }
+                    }
+                    coursesAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> Toast.makeText(CourseSelection.this, "Failed to retrieve courses", Toast.LENGTH_SHORT).show());
+    }
+
+    private void handleCourseSelection(int position) {
+        String selectedCourse = coursesAdapter.getItem(position);
+        selectedCoursesList.add(selectedCourse);
+        coursesList.remove(selectedCourse);
+        coursesAdapter.notifyDataSetChanged();
+        selectedCoursesAdapter.notifyDataSetChanged();
+    }
+
+    private void handleCourseDeselection(int position) {
+        String course = selectedCoursesAdapter.getItem(position);
+        coursesList.add(course);
+        selectedCoursesList.remove(course);
+        coursesAdapter.notifyDataSetChanged();
+        selectedCoursesAdapter.notifyDataSetChanged();
+    }
+
+    private void saveUserCourses(FirebaseUser user) {
+        if (user != null) {
+            HashMap<String, Object> userData = new HashMap<>();
+            userData.put("courses", selectedCoursesList);  // This will include re-saving existing selections if no changes are made
+
+            firestore.collection("Users").document(user.getUid())
+                    .set(userData, SetOptions.merge())  // Using merge to ensure other fields are not affected
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(CourseSelection.this, "Courses updated successfully!", Toast.LENGTH_SHORT).show();
+                        redirectUserBasedOnType(userRole);  // Redirect after save
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(CourseSelection.this, "Failed to update courses", Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(CourseSelection.this, "User is not signed in", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void redirectUserBasedOnType(String userType) {
+        Class<?> activityClass = "student".equals(userType) ? StudentActivity.class : LecturerActivity.class;
+        Intent intent = new Intent(CourseSelection.this, activityClass);
+        startActivity(intent);
+    }
 }
-
-

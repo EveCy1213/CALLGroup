@@ -15,18 +15,17 @@
         android:theme="@style/Theme.CALL_Group"
         tools:targetApi="31">
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".Calander"
+            android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".CourseSelection"
-            android:exported="true">
-        </activity>
+            android:exported="false"/>
         <activity
             android:name=".LecturerActivity"
             android:exported="false" />

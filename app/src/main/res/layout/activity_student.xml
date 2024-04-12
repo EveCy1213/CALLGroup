@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <!-- ListView to display weeks -->
     <ListView
         android:id="@+id/weekListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
 
-    <!-- TableLayout to display timetable -->
+    <!-- ScrollView and TableLayout to display timetable -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -23,4 +25,14 @@
             android:stretchColumns="*">
         </TableLayout>
     </ScrollView>
+
+    <!-- Button to edit courses -->
+    <Button
+        android:id="@+id/editCoursesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Courses"
+        android:background="@color/design_default_color_primary"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="8dp"/>
 </LinearLayout>
