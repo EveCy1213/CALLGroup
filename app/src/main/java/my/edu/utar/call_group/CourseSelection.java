@@ -3,6 +3,7 @@ package my.edu.utar.call_group;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -82,22 +85,31 @@ public class CourseSelection extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCourse = coursesAdapter.getItem(position);
+
+                // Remove the selected course from the adapter
+                coursesAdapter.remove(selectedCourse);
+
+
                 selectedCoursesList.add(selectedCourse);
                 selectedCoursesAdapter.notifyDataSetChanged();
+
+                // Notify the courses adapter that an item has been removed
+                coursesAdapter.notifyDataSetChanged();
+
             }
         });
 
 
-        selectedCoursesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedCourse = selectedCoursesAdapter.getItem(position);
-                selectedCoursesList.remove(position);
-                selectedCoursesAdapter.notifyDataSetChanged();
-                Toast.makeText(CourseSelection.this, selectedCourse + " removed", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
+//        selectedCoursesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                String selectedCourse = selectedCoursesAdapter.getItem(position);
+//                selectedCoursesList.remove(position);
+//                selectedCoursesAdapter.notifyDataSetChanged();
+//                Toast.makeText(CourseSelection.this, selectedCourse + " removed", Toast.LENGTH_SHORT).show();
+//                return true;
+//            }
+//        });
 
 
         Button backButton = findViewById(R.id.button_back);
@@ -129,6 +141,59 @@ public class CourseSelection extends AppCompatActivity {
 
             }
         });
+
+        selectedCoursesListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        selectedCoursesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Handle item selection here
+                for (int i = 0; i < selectedCoursesListView.getChildCount(); i++) {
+                    View itemView = selectedCoursesListView.getChildAt(i);
+                    if (itemView != null) {
+                        itemView.setBackgroundColor(Color.TRANSPARENT); // Reset background color
+                    }
+                }
+
+
+                selectedCoursesListView.setItemChecked(position, true); // Optionally, highlight the selected item
+
+                // Get the selected item view and change its background color
+                View selectedItemView = selectedCoursesListView.getChildAt(position - selectedCoursesListView.getFirstVisiblePosition());
+                if (selectedItemView != null) {
+                    selectedItemView.setBackgroundColor(Color.LTGRAY);
+                    // You can also change text color, etc., as per your design
+                }
+
+            }
+        });
+
+        Button deleteButton=findViewById(R.id.button_delete);
+
+        // Step 2: Set OnClickListener for the delete button
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the position of the selected item
+                int position = selectedCoursesListView.getCheckedItemPosition();
+
+                if (position != ListView.INVALID_POSITION) {
+                    // Remove the selected course from the adapter
+                    String selectedCourse = selectedCoursesAdapter.getItem(position);
+                    selectedCoursesAdapter.remove(selectedCourse);
+                    selectedCoursesAdapter.notifyDataSetChanged();
+
+                    // Add the selected course back to the course list
+                    coursesAdapter.add(selectedCourse);
+                    coursesAdapter.notifyDataSetChanged();
+
+                } else {
+                    // Inform the user that no item is selected
+                    Toast.makeText(getApplicationContext(), "Please select a course to delete", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
     }
 
     private void fetchCourses() {
