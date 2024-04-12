@@ -94,15 +94,15 @@ public class CourseSelection extends AppCompatActivity {
                             selectedCoursesList.addAll(userCourses);
                             selectedCoursesAdapter.notifyDataSetChanged();
                         }
-                        fetchAllCourses();  // Fetch all courses to populate the available courses list
+                        fetchAllCourses();
                     } else {
-                        // Handle new user case if no document exists
+
                         fetchAllCourses();
                     }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(CourseSelection.this, "Failed to fetch user data", Toast.LENGTH_SHORT).show();
-                    fetchAllCourses(); // Attempt to fetch courses regardless of user data fetch failure
+                    fetchAllCourses();
                 });
     }
 
@@ -142,10 +142,10 @@ public class CourseSelection extends AppCompatActivity {
     private void saveUserCourses(FirebaseUser user) {
         if (user != null) {
             HashMap<String, Object> userData = new HashMap<>();
-            userData.put("courses", selectedCoursesList);  // This will include re-saving existing selections if no changes are made
+            userData.put("courses", selectedCoursesList);
 
             firestore.collection("Users").document(user.getUid())
-                    .set(userData, SetOptions.merge())  // Using merge to ensure other fields are not affected
+                    .set(userData, SetOptions.merge())
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(CourseSelection.this, "Courses updated successfully!", Toast.LENGTH_SHORT).show();
                         redirectUserBasedOnType(userRole);  // Redirect after save
