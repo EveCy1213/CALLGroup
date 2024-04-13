@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText password_edit_text;
     private EditText confirm_password_text;
     private Button register_btn;
-    private Button login_btn;
+    private ImageButton login_btn;
 
     private FirebaseAuth mAuth;
     ProgressBar progressBar;
@@ -40,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
         confirm_password_text = findViewById(R.id.confirm_password);
         register_btn = findViewById(R.id.register_button);
         progressBar = findViewById(R.id.progressBar);
-        login_btn=findViewById(R.id.login_button);
+        login_btn=findViewById(R.id.back_to_login_icon);
 
         register_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +90,9 @@ public class RegisterActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Authentication Success.", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             // Handle the error
                             Toast.makeText(RegisterActivity.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
