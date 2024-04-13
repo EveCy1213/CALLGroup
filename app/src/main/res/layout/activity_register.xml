@@ -1,50 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:background="@color/background_green"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".RegisterActivity">
 
     <!-- Email input -->
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:backgroundTint="@color/transparent"
+        app:cardElevation="0dp">
+
+        <ImageButton
+            android:id="@+id/back_to_login_icon"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/transparent"
+            android:src="@drawable/angle_left" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/adamina"
+            android:paddingTop="1dp"
+            android:text="Register"
+            android:textAlignment="center"
+            android:textColor="@color/background_yellow"
+            android:textSize="24sp" />
+
+    </androidx.cardview.widget.CardView>
+
     <EditText
         android:id="@+id/register_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="30dp"
+        android:background="@color/white"
         android:hint="@string/email"
+        android:inputType="textEmailAddress"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:background="@drawable/edit_text_background"
-        android:inputType="textEmailAddress" />
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp" />
 
 
     <EditText
         android:id="@+id/register_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:background="@color/white"
         android:hint="@string/password"
+        android:inputType="textPassword"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:background="@drawable/edit_text_background"
-        android:inputType="textPassword" />
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp" />
 
     <EditText
         android:id="@+id/confirm_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@color/white"
         android:hint="@string/confirm_password"
+        android:inputType="textPassword"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:background="@drawable/edit_text_background"
-        android:inputType="textPassword" />
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp" />
 
 
     <Button
@@ -52,20 +86,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/register" />
+        android:backgroundTint="@color/gold_button"
+        android:text="@string/register"
+        app:cornerRadius="8dp" />
 
-<ProgressBar
-    android:id="@+id/progressBar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/login_button"
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/login" />
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/register_line" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/amita_bold"
+        android:text="START YOUR JOURNEY WITH US"
+        android:textColor="@color/gold_button"
+        android:textSize="16sp" />
 
 
 </LinearLayout>
