@@ -66,17 +66,17 @@ public class LecturerActivity extends AppCompatActivity {
             }
         });
 
-        Button btnEditCourses = findViewById(R.id.editCoursesButton);
-        btnEditCourses.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LecturerActivity.this, CourseSelection.class);
-                intent.putStringArrayListExtra("selectedCourses", selectedCourses);
-                intent.putExtra("sourceActivity", "LecturerActivity");
-                intent.putExtra("userRole", "lecturer");
-                startActivity(intent);
-            }
-        });
+//        Button btnEditCourses = findViewById(R.id.editCoursesButton);
+//        btnEditCourses.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LecturerActivity.this, CourseSelection.class);
+//                intent.putStringArrayListExtra("selectedCourses", selectedCourses);
+//                intent.putExtra("sourceActivity", "LecturerActivity");
+//                intent.putExtra("userRole", "lecturer");
+//                startActivity(intent);
+//            }
+//        });
     }
 
     private void loadTimetableForWeek(final String selectedWeek) {
