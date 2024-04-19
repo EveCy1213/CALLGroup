@@ -27,6 +27,9 @@
             android:name=".CourseSelection"
             android:exported="false"/>
         <activity
+            android:name=".CourseDetail"
+            android:exported="false"/>
+        <activity
             android:name=".LecturerActivity"
             android:exported="false" />
         <activity
@@ -41,6 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <meta-data
             android:name="preloaded_fonts"
