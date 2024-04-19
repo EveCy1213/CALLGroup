@@ -28,9 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText username_edit_text;
     private EditText password_edit_text;
     private RadioGroup login_group;
-
     private FirebaseAuth mAuth;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             int checkedId = login_group.getCheckedRadioButtonId();
+
                             String userType;
                             if (checkedId == R.id.login_as_student) {
                                 userType = "student";
