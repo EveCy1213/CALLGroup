@@ -29,6 +29,11 @@
         <activity
             android:name=".CourseDetail"
             android:exported="false"/>
+
+        <activity
+            android:name=".NewEvent"
+            android:exported="false"/>
+
         <activity
             android:name=".LecturerActivity"
             android:exported="false" />

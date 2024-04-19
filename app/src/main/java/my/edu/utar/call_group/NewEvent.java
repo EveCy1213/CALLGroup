@@ -3,6 +3,7 @@ package my.edu.utar.call_group;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,7 +31,7 @@ import java.util.Map;
 public class NewEvent extends AppCompatActivity {
 
     ArrayList<String> selectedCourses = new ArrayList<>(); // Initialize with an empty ArrayList
-    private TextView textViewCourseDetail;
+    private TextView textViewNewEvent;
     private Spinner spinnerCourse, spinnerWeek, spinnerDay, spinnerStartTime, spinnerEndTime;
     private EditText editTextEventName;
     private Button buttonSave, buttonCancel;
@@ -48,6 +49,9 @@ public class NewEvent extends AppCompatActivity {
             spinnerEndTime = findViewById(R.id.spinnerEndTime);
             buttonSave = findViewById(R.id.buttonSave);
             buttonCancel = findViewById(R.id.buttonCancel);
+            textViewNewEvent = findViewById(R.id.textViewNewEvent);
+
+            Intent intent = getIntent();
 
             // Initialize and populate spinners
             fetchUserSelectedCourses();
