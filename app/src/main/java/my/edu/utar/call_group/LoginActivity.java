@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password_edit_text;
     private RadioGroup login_group;
     private FirebaseAuth mAuth;
+    ProgressBar progressBar;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +43,17 @@ public class LoginActivity extends AppCompatActivity {
         username_edit_text=findViewById(R.id.username);
         password_edit_text=findViewById(R.id.password);
         login_group=findViewById(R.id.login_as_group);
+        progressBar = findViewById(R.id.progressBar);
+
+
 
         Button loginButton=findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login_check();
+                progressBar.setVisibility(View.VISIBLE);
+
             }
         });
 

@@ -66,6 +66,15 @@ public class LecturerActivity extends AppCompatActivity {
             }
         });
 
+        Button btnPolling = findViewById(R.id.pollingButton);
+        btnPolling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LecturerActivity.this, Polling.class);
+                startActivity(intent);
+            }
+        });
+
 //        Button btnEditCourses = findViewById(R.id.editCoursesButton);
 //        btnEditCourses.setOnClickListener(new View.OnClickListener() {
 //            @Override

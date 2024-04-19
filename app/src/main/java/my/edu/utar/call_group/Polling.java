@@ -65,8 +65,6 @@ public class Polling extends AppCompatActivity {
 //                weekListView.setVisibility(View.GONE);
 //            }
 //        });
-
-
         radioGroupOption = findViewById(R.id.radioGroup);
         buttonAddOption = findViewById(R.id.buttonAddOption);
         textViewTitle = findViewById(R.id.textViewTitle);
