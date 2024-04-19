@@ -33,8 +33,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentActivity extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityStudentBinding;
 
+public class StudentActivity extends BaseActivity {
+    ActivityStudentBinding activityStudentBinding;
     private ArrayList<String> selectedCourses;
     private FirebaseFirestore db;
     private TableLayout tableLayout;
@@ -44,7 +46,9 @@ public class StudentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student);
+        activityStudentBinding = ActivityStudentBinding.inflate(getLayoutInflater());
+        setContentView(activityStudentBinding.getRoot());
+        allocatedActivityTitle("SELECT WEEK");
 
         db = FirebaseFirestore.getInstance();
 

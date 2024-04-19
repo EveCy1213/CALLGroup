@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
@@ -36,7 +37,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class CourseSelection extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityCourseSelectionBinding;
+
+public class CourseSelection extends BaseActivity {
+    ActivityCourseSelectionBinding activityCourseSelectionBinding;
     private ListView listViewCourses;
     private ListView listViewSelectedCourses;
     private ArrayAdapter<String> coursesAdapter;
@@ -49,7 +53,9 @@ public class CourseSelection extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_selection);
+        activityCourseSelectionBinding = ActivityCourseSelectionBinding.inflate(getLayoutInflater());
+        setContentView(activityCourseSelectionBinding.getRoot());
+        allocatedActivityTitle("SELECT COURSE");
 
         firestore = FirebaseFirestore.getInstance();
         userRole = getIntent().getStringExtra("userRole");
