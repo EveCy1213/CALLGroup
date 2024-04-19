@@ -127,12 +127,12 @@ public class Polling extends AppCompatActivity {
         // Add the RadioButton to the RadioGroup
         radioGroupOption.addView(radioButton);
 
-        // Create a new View for the percentage bar
-        View percentageBar = new View(this);
-        percentageBar.setBackgroundColor(getResources().getColor(R.color.gold_button)); // Set background color
-        RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.height = 50; // Set height as needed
-        percentageBar.setLayoutParams(layoutParams);
+//        // Create a new View for the percentage bar
+//        View percentageBar = new View(this);
+//        percentageBar.setBackgroundColor(getResources().getColor(R.color.gold_button)); // Set background color
+//        RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+//        layoutParams.height = 50; // Set height as needed
+//        percentageBar.setLayoutParams(layoutParams);
 
         // Add the percentageBar to the RadioGroup
         radioGroupOption.addView(percentageBar);
