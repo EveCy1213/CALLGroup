@@ -85,6 +85,7 @@ public class StudentActivity extends BaseActivity {
                 intent.putExtra("userRole", "student");
                 startActivity(intent);
 
+
             }
         });
     }
@@ -117,10 +118,11 @@ public class StudentActivity extends BaseActivity {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (DocumentSnapshot document : task.getResult()) {
+                                    String week = selectedWeek;
                                     String startTime = document.getString("Start Time");
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
-                                    updateTimetable(startTime, endTime, day, courseName);
+                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName);
                                 }
                             } else {
                                 Toast.makeText(StudentActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -173,7 +175,7 @@ public class StudentActivity extends BaseActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-    private void updateTimetable(String startTime, String endTime, String day, String course) {
+    private void updateTimetable(String startTime, String endTime, String week, String day,String courseCode, String course) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -193,6 +195,26 @@ public class StudentActivity extends BaseActivity {
                         cell.setText(currentText + course);
                         cell.setGravity(Gravity.CENTER);
                         cell.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                        cell.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // Get the course name from the text of the clicked cell
+                                String courseName = ((TextView) v).getText().toString();
+
+                                // Create an intent
+                                Intent intent = new Intent(getApplicationContext(), CourseDetail.class);
+
+                                // Put the course name as an extra in the intent
+                                intent.putExtra("courseCode", courseCode);
+                                intent.putExtra("courseName", course);
+                                intent.putExtra("week", week);
+                                intent.putExtra("day", day);
+                                intent.putExtra("startTime",startTime);
+                                intent.putExtra("endTime",endTime);
+                                // Start the activity with the intent
+                                startActivity(intent);
+                            }
+                        });
                     }
                 }
             } else {
