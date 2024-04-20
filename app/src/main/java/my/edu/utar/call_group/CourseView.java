@@ -1,6 +1,9 @@
 package my.edu.utar.call_group;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.activity.EdgeToEdge;
@@ -12,11 +15,22 @@ import android.content.Intent;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Firebase;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.android.gms.tasks.OnFailureListener;
+
+import java.io.File;
+
 
 public class CourseView extends AppCompatActivity {
 
     private TextView textViewCourseDetail, textViewCourseCode,
-            textViewCourseName,textViewWeek, textViewDay, textViewStartTime, textViewEndTime, textViewRemark;
+            textViewCourseName, textViewWeek, textViewDay, textViewStartTime, textViewEndTime, textViewRemark;
 
     private Button buttonDownload;
 
@@ -54,22 +68,56 @@ public class CourseView extends AppCompatActivity {
         textViewEndTime.setText(endTime);
         textViewRemark.setText(remark);
 
+
         buttonDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Perform the download operation here
-                downloadCourseDetails(courseName, courseCode, week, day, startTime, endTime);
+                Uri fileUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/callgroup-25079.appspot.com/o/files%2Fimage%3A1000000028?alt=media&token=e6423ce0-eff1-4f95-ba12-c09f82899821");
+                String fileName = "CourseMaterial.jpg";
+                downloadFileFromUri(fileUri, fileName);
             }
         });
 
 
-
     }
 
-    private void downloadCourseDetails(String courseName, String courseCode, String week, String day, String startTime, String endTime) {
-        // Implement the download logic here
-        // For example, you can create a file containing the course details
-        // Or you can send the details to a server for processing
-        // This method will be called when the "Download" button is clicked
-    }
+    private void downloadFileFromUri(Uri fileUri, String fileName) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        if (fileUri != null && !fileUri.toString().isEmpty()) {
+
+            // Get a reference to the storage location using the file URI
+            StorageReference storageRef = storage.getReferenceFromUrl(fileUri.toString());
+
+            // Create a local file to save the downloaded file
+            File localFile = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOWNLOADS), fileName);
+
+            // Start the download
+            storageRef.getFile(localFile)
+                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                            // File downloaded successfully
+                            Toast Toast = null;
+                            Toast.makeText(CourseView.this, "Downloaded successfully", Toast.LENGTH_SHORT).show();
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            Toast.makeText(CourseView.this, "Download failed", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+            } else {
+            // URI not found, display message
+            Toast.makeText(CourseView.this, "File not found", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
 }
