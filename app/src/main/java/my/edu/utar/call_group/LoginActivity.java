@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -89,35 +93,58 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+
+
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            int checkedId = login_group.getCheckedRadioButtonId();
-
-                            String userType;
-                            if (checkedId == R.id.login_as_student) {
-                                userType = "student";
-                            } else if (checkedId == R.id.login_as_lecturer) {
-                                userType = "lecturer";
-                            } else {
-                                userType = "student"; // default to student
-                            }
-
                             FirebaseUser user = mAuth.getCurrentUser();
-                            checkIfCoursesSelected(user, userType);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
+                            if (user != null) {
+                                String uid = user.getUid();
+
+                                // Construct the document reference
+                                DocumentReference userRef = FirebaseFirestore.getInstance().collection("Users").document(uid);
+
+                                // Fetch the document
+                                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            // Document exists, retrieve the user's role
+                                            String userType;
+                                            userType = documentSnapshot.getString("role");
+                                            checkIfCoursesSelected(user, userType);
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Error fetching document
+                                    }
+                                });
+
+//                            if (checkedId == R.id.login_as_student) {
+//                                userType = "student";
+//                            } else if (checkedId == R.id.login_as_lecturer) {
+//                                userType = "lecturer";
+//                            } else {
+//                                userType = "student"; // default to student
+//                            }
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                            }
                         }
                     }
                 });
-    }
+    };
 
     private void checkIfCoursesSelected(FirebaseUser user, String userType) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Log.d("userType",userType);
         db.collection("Users").document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -130,7 +157,6 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("userRole", userType);
                         startActivity(intent);
                     } else {
-
                         Class<?> activityClass = "student".equals(userType) ? StudentActivity.class : LecturerActivity.class;
                         Intent intent = new Intent(LoginActivity.this, activityClass);
                         intent.putStringArrayListExtra("selectedCourses", new ArrayList<>(courses));
