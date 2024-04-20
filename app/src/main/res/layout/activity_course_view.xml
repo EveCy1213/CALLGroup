@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewCourseDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Course Detail"
+        android:textSize="20sp"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewCourseCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Course Code"/>
+
+    <TextView
+        android:id="@+id/textViewCourseName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Course Name"/>
+
+    <TextView
+        android:id="@+id/textViewWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Week"/>
+
+    <TextView
+        android:id="@+id/textViewDay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Day"/>
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="StartTime"
+        />
+
+    <TextView
+        android:id="@+id/textViewStartTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="End Time"/>
+
+    <TextView
+        android:id="@+id/textViewEndTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:id="@+id/buttonDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download Course Material"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remark"
+        />
+
+    <TextView
+        android:id="@+id/textViewRemark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+</LinearLayout>

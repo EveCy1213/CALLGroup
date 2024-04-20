@@ -122,7 +122,8 @@ public class StudentActivity extends BaseActivity {
                                     String startTime = document.getString("Start Time");
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
-                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName);
+                                    String remark = document.getString("Remark");
+                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName, remark);
                                 }
                             } else {
                                 Toast.makeText(StudentActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -175,7 +176,7 @@ public class StudentActivity extends BaseActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-    private void updateTimetable(String startTime, String endTime, String week, String day,String courseCode, String course) {
+    private void updateTimetable(String startTime, String endTime, String week, String day,String courseCode, String course, String remark) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -202,7 +203,7 @@ public class StudentActivity extends BaseActivity {
                                 String courseName = ((TextView) v).getText().toString();
 
                                 // Create an intent
-                                Intent intent = new Intent(getApplicationContext(), CourseDetail.class);
+                                Intent intent = new Intent(getApplicationContext(), CourseView.class);
 
                                 // Put the course name as an extra in the intent
                                 intent.putExtra("courseCode", courseCode);
@@ -211,6 +212,7 @@ public class StudentActivity extends BaseActivity {
                                 intent.putExtra("day", day);
                                 intent.putExtra("startTime",startTime);
                                 intent.putExtra("endTime",endTime);
+                                intent.putExtra("remark",remark);
                                 // Start the activity with the intent
                                 startActivity(intent);
                             }
