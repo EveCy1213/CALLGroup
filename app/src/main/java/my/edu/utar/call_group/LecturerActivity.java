@@ -75,6 +75,15 @@ public class LecturerActivity extends AppCompatActivity {
             }
         });
 
+        Button newEventButton = findViewById(R.id.newEventButton);
+        newEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LecturerActivity.this, NewEvent.class);
+                startActivity(intent);
+            }
+        });
+
 //        Button btnEditCourses = findViewById(R.id.editCoursesButton);
 //        btnEditCourses.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -86,6 +95,10 @@ public class LecturerActivity extends AppCompatActivity {
 //                startActivity(intent);
 //            }
 //        });
+
+
+
+
     }
 
     private void loadTimetableForWeek(final String selectedWeek) {
