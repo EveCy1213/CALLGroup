@@ -83,22 +83,6 @@ public class LecturerActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-//        Button btnEditCourses = findViewById(R.id.editCoursesButton);
-//        btnEditCourses.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LecturerActivity.this, CourseSelection.class);
-//                intent.putStringArrayListExtra("selectedCourses", selectedCourses);
-//                intent.putExtra("sourceActivity", "LecturerActivity");
-//                intent.putExtra("userRole", "lecturer");
-//                startActivity(intent);
-//            }
-//        });
-
-
-
-
     }
 
     private void loadTimetableForWeek(final String selectedWeek) {
@@ -133,7 +117,8 @@ public class LecturerActivity extends AppCompatActivity {
                                     String startTime = document.getString("Start Time");
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
-                                    updateTimetable(startTime, endTime, week , day, courseCode, courseName);
+                                    String documentID = document.getId();
+                                    updateTimetable(startTime, endTime, week , day, courseCode, courseName,documentID);
                                 }
                             } else {
                                 Toast.makeText(LecturerActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -186,7 +171,7 @@ public class LecturerActivity extends AppCompatActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-    private void updateTimetable(String startTime, String endTime,String week, String day,String courseCode, String course) {
+    private void updateTimetable(String startTime, String endTime,String week, String day,String courseCode, String course , String documentID) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -221,11 +206,11 @@ public class LecturerActivity extends AppCompatActivity {
                                 intent.putExtra("day", day);
                                 intent.putExtra("startTime",startTime);
                                 intent.putExtra("endTime",endTime);
+                                intent.putExtra("documentId",documentID);
                                 // Start the activity with the intent
                                 startActivity(intent);
                             }
                         });
-
                     }
                 }
             } else {
@@ -254,7 +239,13 @@ public class LecturerActivity extends AppCompatActivity {
                                     Intent intent = new Intent(getApplicationContext(), CourseDetail.class);
 
                                     // Put the course name as an extra in the intent
-                                    intent.putExtra("courseName", courseName);
+                                    intent.putExtra("courseCode", courseCode);
+                                    intent.putExtra("courseName", course);
+                                    intent.putExtra("week", week);
+                                    intent.putExtra("day", day);
+                                    intent.putExtra("startTime",startTime);
+                                    intent.putExtra("endTime",endTime);
+                                    intent.putExtra("documentId",documentID);
                                     // Start the activity with the intent
                                     startActivity(intent);
                                 }
