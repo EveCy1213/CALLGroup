@@ -28,8 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CourseDetail extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityCourseDetailBinding;
+import my.edu.utar.call_group.databinding.ActivityCourseSelectionBinding;
 
+public class CourseDetail extends BaseActivity {
+    ActivityCourseDetailBinding activityCourseDetailBinding;
     private TextView textViewCourseDetail, textViewCourseCode, textViewCourseName , textViewFileUploaded;
     private Spinner spinnerWeek, spinnerDay, spinnerStartTime, spinnerEndTime;
     private Button buttonUploadFile, buttonSave;
@@ -43,7 +46,9 @@ public class CourseDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_detail);
+        activityCourseDetailBinding = ActivityCourseDetailBinding.inflate(getLayoutInflater());
+        setContentView(activityCourseDetailBinding.getRoot());
+        allocatedActivityTitle("COURSE DETAIL");
 
         textViewCourseDetail = findViewById(R.id.textViewCourseDetail);
         textViewCourseCode = findViewById(R.id.textViewCourseCode);
@@ -116,7 +121,7 @@ public class CourseDetail extends AppCompatActivity {
                 courseDetails.put("Remarks",remarks);
                 if (selectedFileUri != null) {
 //                    uploadFileToStorage(selectedFileUri);
-                        courseDetails.put("File Url", fileUrlinFirebase);
+                    courseDetails.put("File Url", fileUrlinFirebase);
                 }
 
                 // Add a new document to the "courses" collection

@@ -7,7 +7,7 @@
     android:background="@color/background_green"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context=".ForgotPasswordActivity">
+    tools:context=".ChangeEmail">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         app:cardElevation="0dp">
 
         <ImageButton
-            android:id="@+id/back_to_login_icon_forget"
+            android:id="@+id/back_to_settings_icon"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:backgroundTint="@color/transparent"
@@ -29,7 +29,7 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/adamina"
             android:paddingTop="1dp"
-            android:text="Reset Password"
+            android:text="Update Email"
             android:textAlignment="center"
             android:textColor="@color/background_yellow"
             android:textSize="24sp" />
@@ -37,7 +37,7 @@
     </androidx.cardview.widget.CardView>
 
     <EditText
-        android:id="@+id/email_edit_text"
+        android:id="@+id/update_email_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -51,11 +51,11 @@
         android:paddingBottom="12dp" />
 
     <Button
-        android:id="@+id/reset_button"
+        android:id="@+id/email_reset_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/gold_button"
-        android:text="Reset Password"
+        android:text="Update Email"
         app:cornerRadius="8dp" />
 
     <ImageView

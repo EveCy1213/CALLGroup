@@ -3,7 +3,6 @@ package my.edu.utar.call_group;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,155 +27,157 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NewEvent extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityCourseDetailBinding;
+import my.edu.utar.call_group.databinding.ActivityNewEventBinding;
 
+public class NewEvent extends BaseActivity {
+ActivityNewEventBinding activityNewEventBinding;
     ArrayList<String> selectedCourses = new ArrayList<>(); // Initialize with an empty ArrayList
-    private TextView textViewNewEvent;
+    private TextView textViewCourseDetail;
     private Spinner spinnerCourse, spinnerWeek, spinnerDay, spinnerStartTime, spinnerEndTime;
     private EditText editTextEventName;
     private Button buttonSave, buttonCancel;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_new_event);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activityNewEventBinding = ActivityNewEventBinding.inflate(getLayoutInflater());
+        setContentView(activityNewEventBinding.getRoot());
+        allocatedActivityTitle("CREATE NEW EVENT");
 
-            spinnerCourse = findViewById(R.id.spinnerCourse);
-            editTextEventName = findViewById(R.id.editTextEvent);
-            spinnerWeek = findViewById(R.id.spinnerWeek);
-            spinnerDay = findViewById(R.id.spinnerDay);
-            spinnerStartTime = findViewById(R.id.spinnerStartTime);
-            spinnerEndTime = findViewById(R.id.spinnerEndTime);
-            buttonSave = findViewById(R.id.buttonSave);
-            buttonCancel = findViewById(R.id.buttonCancel);
-            textViewNewEvent = findViewById(R.id.textViewNewEvent);
+        spinnerCourse = findViewById(R.id.spinnerCourse);
+        editTextEventName = findViewById(R.id.editTextEvent);
+        spinnerWeek = findViewById(R.id.spinnerWeek);
+        spinnerDay = findViewById(R.id.spinnerDay);
+        spinnerStartTime = findViewById(R.id.spinnerStartTime);
+        spinnerEndTime = findViewById(R.id.spinnerEndTime);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonCancel = findViewById(R.id.buttonCancel);
 
-            Intent intent = getIntent();
-
-            // Initialize and populate spinners
-            fetchUserSelectedCourses();
+        // Initialize and populate spinners
+        fetchUserSelectedCourses();
 //            populateSpinners();
 
-            // Set onClickListener for buttons
-            buttonSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String selectedCourse = spinnerCourse.getSelectedItem().toString();
-                    String eventName = editTextEventName.getText().toString();
-                    String selectedWeek = spinnerWeek.getSelectedItem().toString();
-                    String selectedDay = spinnerDay.getSelectedItem().toString();
-                    String selectedStartTime = spinnerStartTime.getSelectedItem().toString();
-                    String selectedEndTime = spinnerEndTime.getSelectedItem().toString();
+        // Set onClickListener for buttons
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedCourse = spinnerCourse.getSelectedItem().toString();
+                String eventName = editTextEventName.getText().toString();
+                String selectedWeek = spinnerWeek.getSelectedItem().toString();
+                String selectedDay = spinnerDay.getSelectedItem().toString();
+                String selectedStartTime = spinnerStartTime.getSelectedItem().toString();
+                String selectedEndTime = spinnerEndTime.getSelectedItem().toString();
 
-                    // Create a new Firestore instance
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                // Create a new Firestore instance
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                    // Define a new document with course details
-                    Map<String, Object> courseDetails = new HashMap<>();
+                // Define a new document with course details
+                Map<String, Object> courseDetails = new HashMap<>();
 
-                    String[] parts = selectedCourse.split(" - ");
-                    String courseCode = parts[0].trim();
-                    String courseName = parts[1].trim();
+                String[] parts = selectedCourse.split(" - ");
+                String courseCode = parts[0].trim();
+                String courseName = parts[1].trim();
 
-                    courseDetails.put("Course Code",courseCode);
-                    courseDetails.put("Course Name",courseName);
-                    courseDetails.put("Event",eventName);
-                    courseDetails.put("Day", selectedDay);
-                    courseDetails.put("Start Time", selectedStartTime);
-                    courseDetails.put("End Time", selectedEndTime);
+                courseDetails.put("Course Code",courseCode);
+                courseDetails.put("Course Name",courseName);
+                courseDetails.put("Event",eventName);
+                courseDetails.put("Day", selectedDay);
+                courseDetails.put("Start Time", selectedStartTime);
+                courseDetails.put("End Time", selectedEndTime);
 
-                    // Add a new document to the "courses" collection
-                    db.collection(selectedWeek)
-                            .add(courseDetails)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    // Document added successfully
-                                    Toast.makeText(NewEvent.this, "Timetable update Success.", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Error occurred while adding document
-                                    Toast.makeText(NewEvent.this, "Timetable update failed. Please try again.", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            });
-                }
-            });
+                // Add a new document to the "courses" collection
+                db.collection(selectedWeek)
+                        .add(courseDetails)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                // Document added successfully
+                                Toast.makeText(NewEvent.this, "Timetable update Success.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Error occurred while adding document
+                                Toast.makeText(NewEvent.this, "Timetable update failed. Please try again.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        });
+            }
+        });
 
-            buttonCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                }
-            );
-        }
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                finish();
+                                            }
+                                        }
+        );
+    }
 
-        private void populateSpinners() {
-            List<String> weeks = new ArrayList<>();
-            weeks.add("Week1");
-            weeks.add("Week2");
-            weeks.add("Week3");
-            weeks.add("Week4");
-            weeks.add("Week5");
-            weeks.add("Week6");
-            weeks.add("Week7");
-            weeks.add("Week8");
-            weeks.add("Week9");
-            weeks.add("Week10");
-            weeks.add("Week11");
-            weeks.add("Week12");
-            weeks.add("Week13");
-            weeks.add("Week14");
+    private void populateSpinners() {
+        List<String> weeks = new ArrayList<>();
+        weeks.add("Week1");
+        weeks.add("Week2");
+        weeks.add("Week3");
+        weeks.add("Week4");
+        weeks.add("Week5");
+        weeks.add("Week6");
+        weeks.add("Week7");
+        weeks.add("Week8");
+        weeks.add("Week9");
+        weeks.add("Week10");
+        weeks.add("Week11");
+        weeks.add("Week12");
+        weeks.add("Week13");
+        weeks.add("Week14");
 
-            List<String> days = new ArrayList<>();
-            days.add("Monday");
-            days.add("Tuesday");
-            days.add("Wednesday");
-            days.add("Thursday");
-            days.add("Friday");
+        List<String> days = new ArrayList<>();
+        days.add("Monday");
+        days.add("Tuesday");
+        days.add("Wednesday");
+        days.add("Thursday");
+        days.add("Friday");
 
-            List<String> times = new ArrayList<>();
-            times.add("8:00AM");
-            times.add("9:00AM");
-            times.add("8:00AM");
-            times.add("9:00AM");
-            times.add("10:00AM");
-            times.add("11:00AM");
-            times.add("12:00PM");
-            times.add("1:00PM");
-            times.add("2:00PM");
-            times.add("3:00PM");
-            times.add("4:00PM");
-            times.add("5:00PM");
-            times.add("6:00PM");
+        List<String> times = new ArrayList<>();
+        times.add("8:00AM");
+        times.add("9:00AM");
+        times.add("8:00AM");
+        times.add("9:00AM");
+        times.add("10:00AM");
+        times.add("11:00AM");
+        times.add("12:00PM");
+        times.add("1:00PM");
+        times.add("2:00PM");
+        times.add("3:00PM");
+        times.add("4:00PM");
+        times.add("5:00PM");
+        times.add("6:00PM");
 
-            ArrayAdapter<String> coursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedCourses);
-            ArrayAdapter<String> weekAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, weeks);
-            ArrayAdapter<String> dayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
-            ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, times);
+        ArrayAdapter<String> coursesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, selectedCourses);
+        ArrayAdapter<String> weekAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, weeks);
+        ArrayAdapter<String> dayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, days);
+        ArrayAdapter<String> timeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, times);
 
-            // Set dropdown layout style for spinners
-            coursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            weekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Set dropdown layout style for spinners
+        coursesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        weekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-            spinnerCourse.setAdapter(coursesAdapter);
-            spinnerCourse.setSelection(0);
-            spinnerWeek.setAdapter(weekAdapter);
-            spinnerWeek.setSelection(0);
-            spinnerDay.setAdapter(dayAdapter);
-            spinnerDay.setSelection(0);
-            spinnerStartTime.setAdapter(timeAdapter);
-            spinnerStartTime.setSelection(0);
-            spinnerEndTime.setAdapter(timeAdapter);
-            spinnerEndTime.setSelection(1);
-        }
+        spinnerCourse.setAdapter(coursesAdapter);
+        spinnerCourse.setSelection(0);
+        spinnerWeek.setAdapter(weekAdapter);
+        spinnerWeek.setSelection(0);
+        spinnerDay.setAdapter(dayAdapter);
+        spinnerDay.setSelection(0);
+        spinnerStartTime.setAdapter(timeAdapter);
+        spinnerStartTime.setSelection(0);
+        spinnerEndTime.setAdapter(timeAdapter);
+        spinnerEndTime.setSelection(1);
+    }
 
     private void fetchUserSelectedCourses() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

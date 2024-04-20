@@ -28,7 +28,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class LecturerActivity extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityCourseDetailBinding;
+import my.edu.utar.call_group.databinding.ActivityLecturerBinding;
+
+public class LecturerActivity extends BaseActivity {
+    ActivityLecturerBinding activityLecturerBinding;
 
     private ArrayList<String> selectedCourses;
     private FirebaseFirestore db;
@@ -39,7 +43,9 @@ public class LecturerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lecturer);
+        activityLecturerBinding = ActivityLecturerBinding.inflate(getLayoutInflater());
+        setContentView(activityLecturerBinding.getRoot());
+        allocatedActivityTitle("SELECT WEEK");
 
         db = FirebaseFirestore.getInstance();
 
@@ -63,26 +69,18 @@ public class LecturerActivity extends AppCompatActivity {
                 loadTimetableForWeek(selectedWeek);
 
                 weekListView.setVisibility(View.GONE);
+                allocatedActivityTitle("TIMETABLE");
             }
         });
 
-        Button btnPolling = findViewById(R.id.pollingButton);
-        btnPolling.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LecturerActivity.this, Polling.class);
-                startActivity(intent);
-            }
-        });
-
-        Button newEventButton = findViewById(R.id.newEventButton);
-        newEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LecturerActivity.this, NewEvent.class);
-                startActivity(intent);
-            }
-        });
+//        Button btnPolling = findViewById(R.id.pollingButton);
+//        btnPolling.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(LecturerActivity.this, Polling.class);
+//                startActivity(intent);
+//            }
+//        });
 
 //        Button btnEditCourses = findViewById(R.id.editCoursesButton);
 //        btnEditCourses.setOnClickListener(new View.OnClickListener() {
@@ -95,10 +93,6 @@ public class LecturerActivity extends AppCompatActivity {
 //                startActivity(intent);
 //            }
 //        });
-
-
-
-
     }
 
     private void loadTimetableForWeek(final String selectedWeek) {
@@ -174,6 +168,7 @@ public class LecturerActivity extends AppCompatActivity {
                 TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                 emptyTextView.setLayoutParams(cellParams);
                 row.addView(emptyTextView);
+
             }
 
             TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, convertDpToPixel(100));

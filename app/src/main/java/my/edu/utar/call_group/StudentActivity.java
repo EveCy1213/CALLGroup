@@ -72,6 +72,7 @@ public class StudentActivity extends BaseActivity {
                 loadTimetableForWeek(selectedWeek);
 
                 weekListView.setVisibility(View.GONE);
+                allocatedActivityTitle("TIMETABLE");
             }
         });
 
@@ -122,7 +123,8 @@ public class StudentActivity extends BaseActivity {
                                     String startTime = document.getString("Start Time");
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
-                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName);
+                                    String remark = document.getString("Remark");
+                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName, remark);
                                 }
                             } else {
                                 Toast.makeText(StudentActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -139,7 +141,9 @@ public class StudentActivity extends BaseActivity {
             TextView dayTextView = new TextView(this);
             dayTextView.setText(day);
             dayTextView.setGravity(Gravity.CENTER);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            dayTextView.setBackgroundResource(R.drawable.table); // Add border background
+            dayTextView.setPadding(10, 10, 10, 10);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
             dayTextView.setLayoutParams(params);
             headerRow.addView(dayTextView);
         }
@@ -152,6 +156,7 @@ public class StudentActivity extends BaseActivity {
             TableRow row = new TableRow(this);
             row.setGravity(Gravity.CENTER_VERTICAL);
             TextView timeTextView = new TextView(this);
+            timeTextView.setPadding(10, 10, 10, 10);
             timeTextView.setText(timeSlot);
             timeTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             row.addView(timeTextView);
@@ -175,7 +180,7 @@ public class StudentActivity extends BaseActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-    private void updateTimetable(String startTime, String endTime, String week, String day,String courseCode, String course) {
+    private void updateTimetable(String startTime, String endTime, String week, String day,String courseCode, String course, String remark) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -202,7 +207,7 @@ public class StudentActivity extends BaseActivity {
                                 String courseName = ((TextView) v).getText().toString();
 
                                 // Create an intent
-                                Intent intent = new Intent(getApplicationContext(), CourseDetail.class);
+                                Intent intent = new Intent(getApplicationContext(), CourseView.class);
 
                                 // Put the course name as an extra in the intent
                                 intent.putExtra("courseCode", courseCode);
@@ -211,6 +216,7 @@ public class StudentActivity extends BaseActivity {
                                 intent.putExtra("day", day);
                                 intent.putExtra("startTime",startTime);
                                 intent.putExtra("endTime",endTime);
+                                intent.putExtra("remark",remark);
                                 // Start the activity with the intent
                                 startActivity(intent);
                             }

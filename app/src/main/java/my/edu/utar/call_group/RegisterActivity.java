@@ -1,5 +1,4 @@
 package my.edu.utar.call_group;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
