@@ -46,7 +46,7 @@ public class CourseDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
 
-        textViewCourseDetail = findViewById(R.id.textViewCourseDetail);
+//        textViewCourseDetail = findViewById(R.id.textViewCourseDetail);
         textViewCourseCode = findViewById(R.id.textViewCourseCode);
         textViewCourseName = findViewById(R.id.textViewCourseName);
         textViewFileUploaded = findViewById(R.id.textViewFileUploaded);

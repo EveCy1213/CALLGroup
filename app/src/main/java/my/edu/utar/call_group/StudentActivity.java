@@ -45,7 +45,7 @@ public class StudentActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-
+        weekListView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -77,20 +77,6 @@ public class StudentActivity extends BaseActivity {
                 loadTimetableForWeek(selectedWeek);
 
                 weekListView.setVisibility(View.GONE);
-            }
-        });
-
-        Button btnEditCourses = findViewById(R.id.editCoursesButton);
-        btnEditCourses.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StudentActivity.this, CourseSelection.class);
-                intent.putStringArrayListExtra("selectedCourses", selectedCourses);
-                intent.putExtra("sourceActivity", "StudentActivity");
-                intent.putExtra("userRole", "student");
-                startActivity(intent);
-
-
             }
         });
     }

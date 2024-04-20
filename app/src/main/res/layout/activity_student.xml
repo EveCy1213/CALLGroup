@@ -28,11 +28,11 @@
 
     <!-- Button to edit courses -->
     <Button
-        android:id="@+id/editCoursesButton"
+        android:id="@+id/selectWeekButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Courses"
-        android:background="@color/design_default_color_primary"
+        android:text="Timetable"
+        android:backgroundTint="@color/gold_button"
         android:textColor="@android:color/white"
         android:layout_marginTop="8dp"/>
 </LinearLayout>

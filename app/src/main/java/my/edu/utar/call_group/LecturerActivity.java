@@ -37,6 +37,11 @@ public class LecturerActivity extends AppCompatActivity {
     private ArrayAdapter<String> weekAdapter;
 
     @Override
+    public void onBackPressed() {
+        weekListView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lecturer);
