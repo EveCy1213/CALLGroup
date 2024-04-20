@@ -2,29 +2,39 @@ package my.edu.utar.call_group;
 
 import android.os.Bundle;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import android.content.Intent;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Button;
 
-public class CourseView extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityCourseDetailBinding;
+import my.edu.utar.call_group.databinding.ActivityCourseViewBinding;
+
+public class CourseView extends BaseActivity {
+    ActivityCourseViewBinding activityCourseViewBinding;
 
     private TextView textViewCourseDetail, textViewCourseCode,
-            textViewCourseName,textViewWeek, textViewDay, textViewStartTime, textViewEndTime, textViewRemark;
+            textViewCourseName, textViewWeek, textViewDay, textViewStartTime, textViewEndTime, textViewRemark;
 
     private Button buttonDownload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_view);
-        textViewCourseDetail = findViewById(R.id.textViewCourseDetail);
+        activityCourseViewBinding = ActivityCourseViewBinding.inflate(getLayoutInflater());
+        setContentView(activityCourseViewBinding.getRoot());
+        allocatedActivityTitle("COURSE DETAIL");
+
+
+//        textViewCourseDetail = findViewById(R.id.textViewCourseDetail);
         textViewCourseCode = findViewById(R.id.textViewCourseCode);
         textViewCourseName = findViewById(R.id.textViewCourseName);
         textViewWeek = findViewById(R.id.textViewWeek);
@@ -61,7 +71,6 @@ public class CourseView extends AppCompatActivity {
                 downloadCourseDetails(courseName, courseCode, week, day, startTime, endTime);
             }
         });
-
 
 
     }

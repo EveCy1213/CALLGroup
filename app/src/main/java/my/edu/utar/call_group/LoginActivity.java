@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         username_edit_text=findViewById(R.id.username);
         password_edit_text=findViewById(R.id.password);
-        login_group=findViewById(R.id.login_as_group);
+//        login_group=findViewById(R.id.login_as_group);
         progressBar = findViewById(R.id.progressBar);
 
 
@@ -116,6 +116,8 @@ public class LoginActivity extends AppCompatActivity {
                                             // Document exists, retrieve the user's role
                                             String userType;
                                             userType = documentSnapshot.getString("role");
+                                            Toast.makeText(LoginActivity.this, "Logged in as " + userType, Toast.LENGTH_SHORT).show();
+
                                             checkIfCoursesSelected(user, userType);
                                         }
                                     }
@@ -156,17 +158,20 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, CourseSelection.class);
                         intent.putExtra("userRole", userType);
                         startActivity(intent);
+                        finish();
                     } else {
                         Class<?> activityClass = "student".equals(userType) ? StudentActivity.class : LecturerActivity.class;
                         Intent intent = new Intent(LoginActivity.this, activityClass);
                         intent.putStringArrayListExtra("selectedCourses", new ArrayList<>(courses));
                         intent.putExtra("userRole", userType);
                         startActivity(intent);
+                        finish();
                     }
                 } else {
                     Intent intent = new Intent(LoginActivity.this, CourseSelection.class);
                     intent.putExtra("userRole", userType);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

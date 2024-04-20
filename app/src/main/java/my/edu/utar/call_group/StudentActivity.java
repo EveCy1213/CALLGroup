@@ -44,6 +44,11 @@ public class StudentActivity extends BaseActivity {
     private ArrayAdapter<String> weekAdapter;
 
     @Override
+    public void onBackPressed() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityStudentBinding = ActivityStudentBinding.inflate(getLayoutInflater());

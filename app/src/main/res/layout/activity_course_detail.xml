@@ -2,26 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#bccab2">
 
     <TextView
-        android:id="@+id/textViewCourseDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Course Detail"
-        android:textSize="20sp"
-        android:padding="8dp"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="@font/adamina"
+        android:shadowColor="@color/background_green"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:text="Course Details"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/textViewCourseCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:shadowColor="@color/background_green"
+        android:textColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:paddingLeft="2dp"
         android:text="Course Code"/>
 
     <TextView
         android:id="@+id/textViewCourseName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:shadowColor="@color/background_green"
+        android:textColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:paddingLeft="2dp"
         android:text="Course Name"/>
 
     <Spinner
@@ -33,11 +62,24 @@
         android:id="@+id/spinnerDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"/>
 
     <TextView
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:shadowColor="@color/background_green"
+        android:textColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:paddingLeft="2dp"
         android:text="Start Time"/>
     <Spinner
         android:id="@+id/spinnerStartTime"
@@ -45,9 +87,17 @@
         android:layout_height="wrap_content" />
 
     <TextView
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:shadowColor="@color/background_green"
+        android:textColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:paddingLeft="2dp"
         android:text="End Time"/>
 
     <Spinner
@@ -59,6 +109,7 @@
         android:id="@+id/buttonUploadFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/gold_button"
         android:text="Upload File"/>
 
     <TextView
@@ -66,12 +117,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </TextView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
 
     <EditText
         android:id="@+id/editTextRemarks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Remarks"
+        android:lineHeight="18sp"
         android:maxLines="5"/>
 
     <LinearLayout
@@ -82,12 +138,18 @@
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"/>
+        android:layout_weight="1"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/gold_button"
+        android:text="CANCEL"/>
 
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="20dp"
+        android:backgroundTint="@color/gold_button"
         android:text="Save"/>
     </LinearLayout>
 </LinearLayout>
