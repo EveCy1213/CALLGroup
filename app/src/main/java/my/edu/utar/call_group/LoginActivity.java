@@ -51,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login_check();
                 progressBar.setVisibility(View.VISIBLE);
+                login_check();
 
             }
         });
@@ -81,9 +81,11 @@ public class LoginActivity extends AppCompatActivity {
 
         if (username.isEmpty()) {
             Toast.makeText(LoginActivity.this, "Enter Email.", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
             return;
         } else if (password.isEmpty()) {
             Toast.makeText(LoginActivity.this, "Enter Password.", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
             return;
         }
 
@@ -101,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
                             } else if (checkedId == R.id.login_as_lecturer) {
                                 userType = "lecturer";
                             } else {
-
                                 userType = "student"; // default to student
                             }
 
@@ -109,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                             checkIfCoursesSelected(user, userType);
                         } else {
                             Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 });
