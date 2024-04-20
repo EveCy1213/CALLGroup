@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_course"
@@ -15,18 +16,44 @@
         android:id="@+id/listViewCourses"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:divider="@color/background_green"
+        android:dividerHeight="1dp"
+        android:elevation="10dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/settings_background"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Selected courses" />
+        android:text="Selected courses"
+        android:textSize="20sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:shadowColor="@color/background_green"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/black"/>
+
 
     <ListView
         android:id="@+id/selected_courses_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        android:background="#bccab2"
+        android:divider="@color/background_green"
+        android:dividerHeight="1dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,27 +63,10 @@
         android:layout_gravity="bottom">
 
         <Button
-            android:id="@+id/button_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back" />
-
-        <Button
-            android:id="@+id/button_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete" />
-
-        <Button
-            android:id="@+id/button_continue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Continue" />
-
-        <Button
             android:id="@+id/button_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/gold_button"
             android:text="Save " />
 
     </LinearLayout>

@@ -9,6 +9,14 @@
         android:icon="@drawable/calendar_icon"
         android:title="Timetable"/>
     <item
+        android:id="@+id/to_new_event"
+        android:icon="@drawable/event_icon"
+        android:title="New Event"/>
+    <item
+        android:id="@+id/to_polling"
+        android:icon="@drawable/polling_icon"
+        android:title="Poll"/>
+    <item
         android:id="@+id/to_settings"
         android:icon="@drawable/settings_icon"
         android:title="Settings" />

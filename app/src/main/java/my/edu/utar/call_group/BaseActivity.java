@@ -1,9 +1,12 @@
 package my.edu.utar.call_group;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,7 +24,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private FirebaseFirestore firestore;
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
+    private View headerView;
+    private TextView user_name, user_email;
+
 
     @Override
     public void setContentView(View view) {
@@ -35,6 +43,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = drawerLayout.findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        headerView = navigationView.getHeaderView(0);
+
+        user_name = headerView.findViewById(R.id.user_name);
+        user_email = headerView.findViewById(R.id.user_email);
+        fetchUsername(user);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.menu_drawer_open, R.string.menu_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -51,16 +65,40 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(BaseActivity.this, CourseSelection.class));
             overridePendingTransition(0, 0);
         } else if (itemID == R.id.to_calendar) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             fetchUserRole(user);
+        } else if (itemID == R.id.to_new_event) {
+            startActivity(new Intent(BaseActivity.this, NewEvent.class));
+            overridePendingTransition(0, 0);
+        } else if (itemID == R.id.to_polling) {
+            startActivity(new Intent(BaseActivity.this, Polling.class));
+            overridePendingTransition(0, 0);
         } else if (itemID == R.id.to_settings) {
             startActivity(new Intent(BaseActivity.this, SettingsActivity.class));
             overridePendingTransition(0, 0);
         } else if (itemID == R.id.to_logout) {
-            startActivity(new Intent(BaseActivity.this, LogoutActivity.class));
+            mAuth.signOut();
+            startActivity(new Intent(BaseActivity.this, MainActivity.class));
             overridePendingTransition(0, 0);
         }
         return false;
+    }
+
+    private void fetchUsername(FirebaseUser user) {
+        if (user != null) {
+            firestore.collection("Users").document(user.getUid()).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String username = documentSnapshot.getString("username");
+                            String email = documentSnapshot.getString("email");
+
+                            user_name.setText(username);
+                            user_email.setText(email);
+
+                        } else {
+                            Toast.makeText(BaseActivity.this, "Username not found", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(e -> Toast.makeText(BaseActivity.this, "Failed to retrieve username", Toast.LENGTH_SHORT).show());
+        }
     }
 
     private void fetchUserRole(FirebaseUser user) {
@@ -68,6 +106,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             firestore.collection("Users").document(user.getUid()).get()
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
+
                             String userRole = documentSnapshot.getString("role");
 
                             if (userRole.equals("student")) {

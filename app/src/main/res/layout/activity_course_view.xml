@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -53,19 +52,21 @@
         android:paddingLeft="2dp"
         android:text="Course Name"/>
 
-    <Spinner
-        android:id="@+id/spinnerWeek"
+    <TextView
+        android:id="@+id/textViewWeek"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Week" />
 
-    <Spinner
-        android:id="@+id/spinnerDay"
+    <TextView
+        android:id="@+id/textViewDay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Day" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@color/black"/>
 
     <TextView
@@ -80,9 +81,10 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:paddingLeft="2dp"
-        android:text="Start Time"/>
-    <Spinner
-        android:id="@+id/spinnerStartTime"
+        android:text="Start Time" />
+
+    <TextView
+        android:id="@+id/textViewStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -98,58 +100,38 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:paddingLeft="2dp"
-        android:text="End Time"/>
-
-    <Spinner
-        android:id="@+id/spinnerEndTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/buttonUploadFile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/gold_button"
-        android:text="Upload File"/>
+        android:text="End Time" />
 
     <TextView
-        android:id="@+id/textViewFileUploaded"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </TextView>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/black"/>
-
-    <EditText
-        android:id="@+id/editTextRemarks"
+        android:id="@+id/textViewEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Remarks"
-        android:lineHeight="18sp"
-        android:maxLines="5"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        />
 
     <Button
-        android:id="@+id/buttonCancel"
+        android:id="@+id/buttonDownload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="20dp"
+        android:layout_gravity="center"
         android:backgroundTint="@color/gold_button"
-        android:text="CANCEL"/>
+        android:text="Download Course Material" />
 
-    <Button
-        android:id="@+id/buttonSave"
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="20dp"
-        android:backgroundTint="@color/gold_button"
-        android:text="Save"/>
-    </LinearLayout>
+        android:textSize="16sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:shadowColor="@color/background_green"
+        android:textColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:paddingLeft="2dp"
+        android:text="Remark" />
+
+    <TextView
+        android:id="@+id/textViewRemark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

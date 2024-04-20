@@ -8,4 +8,8 @@
     <color name='transparent'>#00000000</color>
     <color name="background_navigation">#B0C77F </color>
     <color name="username_color">#FEE900</color>
+    <color name="text_color">#182693</color>
+    <color name="text_color_2">#585858</color>
+    <color name="view_background">#090909</color>
+
 </resources>

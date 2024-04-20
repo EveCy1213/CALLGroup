@@ -37,14 +37,4 @@
         android:textColor="@android:color/white"
         android:layout_marginTop="8dp"/>
 
-    <Button
-        android:id="@+id/pollingButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Polling"
-        android:background="@color/design_default_color_primary"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="8dp"/>
-
-
 </LinearLayout>
