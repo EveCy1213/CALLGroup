@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CALL_Group"
         tools:targetApi="31">
-
+        <activity
+            android:name=".CourseView"
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
