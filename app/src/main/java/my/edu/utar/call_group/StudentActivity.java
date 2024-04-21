@@ -130,12 +130,17 @@ public class StudentActivity extends BaseActivity {
 
     private void addHeaderRow() {
         TableRow headerRow = new TableRow(this);
-        String[] daysOfWeek = {"Time", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        String[] daysOfWeek = {"Time", "Mon", "Tues", "Wed", "Thurs", "Fri"};
         for (String day : daysOfWeek) {
             TextView dayTextView = new TextView(this);
             dayTextView.setText(day);
             dayTextView.setGravity(Gravity.CENTER);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.MATCH_PARENT
+            );
+            dayTextView.setBackgroundColor(getColor(R.color.background_green));
+            dayTextView.setTextColor(getColor(R.color.white));
             dayTextView.setLayoutParams(params);
             headerRow.addView(dayTextView);
         }
@@ -149,7 +154,14 @@ public class StudentActivity extends BaseActivity {
             row.setGravity(Gravity.CENTER_VERTICAL);
             TextView timeTextView = new TextView(this);
             timeTextView.setText(timeSlot);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.MATCH_PARENT
+            );
+            timeTextView.setLayoutParams(params);
             timeTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            timeTextView.setBackgroundResource(R.drawable.table_time_cell);
+            timeTextView.setTextColor(getColor(R.color.white));
             row.addView(timeTextView);
 
             for (int i = 0; i < daysOfWeek.length - 1; i++) {
@@ -161,7 +173,7 @@ public class StudentActivity extends BaseActivity {
                 row.addView(emptyTextView);
             }
 
-            TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, convertDpToPixel(100));
+            TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, convertDpToPixel(100));
             row.setLayoutParams(rowParams);
             tableLayout.addView(row);
         }
@@ -253,11 +265,13 @@ public class StudentActivity extends BaseActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light,
+                android.R.color.system_primary_container_dark,
                 android.R.color.holo_purple,
                 android.R.color.holo_blue_light,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light,
+                android.R.color.system_primary_container_dark,
                 android.R.color.holo_purple
         };
         int colorIndex = rowIndex % eventColors.length;

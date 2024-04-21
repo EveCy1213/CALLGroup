@@ -51,7 +51,7 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:layout_weight="1"
-        android:background="#bccab2"
+        android:background="@color/background_light_green"
         android:divider="@color/background_green"
         android:dividerHeight="1dp" />
 

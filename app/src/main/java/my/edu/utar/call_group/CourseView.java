@@ -46,7 +46,7 @@ public class CourseView extends BaseActivity {
         super.onCreate(savedInstanceState);
         activityCourseViewBinding = ActivityCourseViewBinding.inflate(getLayoutInflater());
         setContentView(activityCourseViewBinding.getRoot());
-        allocatedActivityTitle("COURSE DETAIL");
+        allocatedActivityTitle("COURSE DETAILS");
 
 
 //        textViewCourseDetail = findViewById(R.id.textViewCourseDetail);

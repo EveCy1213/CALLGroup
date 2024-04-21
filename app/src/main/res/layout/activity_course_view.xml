@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="#bccab2">
+    android:background="@color/background_light_green">
 
     <TextView
         android:layout_width="match_parent"
@@ -21,6 +21,11 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/black"/>
 
     <TextView
         android:id="@+id/textViewCourseCode"
@@ -34,7 +39,7 @@
         android:textColor="@color/white"
         android:shadowDx="2"
         android:shadowDy="2"
-        android:paddingLeft="2dp"
+        android:shadowRadius="4"
         android:text="Course Code"/>
 
     <TextView
@@ -44,29 +49,89 @@
         android:textSize="16sp"
         android:fontFamily="@font/adamina"
         android:textStyle="bold"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:shadowColor="@color/background_green"
         android:textColor="@color/white"
         android:shadowDx="2"
         android:shadowDy="2"
-        android:paddingLeft="2dp"
+        android:shadowRadius="4"
         android:text="Course Name"/>
 
     <TextView
         android:id="@+id/textViewWeek"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
         android:text="Week" />
 
     <TextView
         android:id="@+id/textViewDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
         android:text="Day" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp"
+        android:shadowColor="@color/background_green"
+        android:textColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:text="Start Time" />
+
+    <TextView
+        android:id="@+id/textViewStartTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp"
+        android:shadowColor="@color/background_green"
+        android:textColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:text="End Time" />
+
+    <TextView
+        android:id="@+id/textViewEndTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@color/white"/>
+
+    <Button
+        android:id="@+id/buttonDownload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/gold_button"
+        android:layout_marginTop="10dp"
+        android:text="Download Course Material" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
         android:background="@color/black"/>
 
     <TextView
@@ -80,58 +145,13 @@
         android:textColor="@color/white"
         android:shadowDx="2"
         android:shadowDy="2"
-        android:paddingLeft="2dp"
-        android:text="Start Time" />
-
-    <TextView
-        android:id="@+id/textViewStartTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:fontFamily="@font/adamina"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:shadowColor="@color/background_green"
-        android:textColor="@color/white"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:paddingLeft="2dp"
-        android:text="End Time" />
-
-    <TextView
-        android:id="@+id/textViewEndTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
-    <Button
-        android:id="@+id/buttonDownload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/gold_button"
-        android:text="Download Course Material" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:fontFamily="@font/adamina"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:shadowColor="@color/background_green"
-        android:textColor="@color/white"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:paddingLeft="2dp"
+        android:shadowRadius="4"
         android:text="Remark" />
 
     <TextView
         android:id="@+id/textViewRemark"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="4dp"/>
 </LinearLayout>

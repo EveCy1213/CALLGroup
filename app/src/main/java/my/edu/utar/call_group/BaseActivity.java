@@ -66,9 +66,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             overridePendingTransition(0, 0);
         } else if (itemID == R.id.to_calendar) {
             fetchUserRole(user);
-        } else if (itemID == R.id.to_new_event) {
-            startActivity(new Intent(BaseActivity.this, NewEvent.class));
-            overridePendingTransition(0, 0);
         } else if (itemID == R.id.to_polling) {
             startActivity(new Intent(BaseActivity.this, Polling.class));
             overridePendingTransition(0, 0);

@@ -11,5 +11,7 @@
     <color name="text_color">#182693</color>
     <color name="text_color_2">#585858</color>
     <color name="view_background">#090909</color>
+    <color name="background_light_green">#bccab2</color>
+    <color name="green_button">#A5B857</color>
 
 </resources>

@@ -113,7 +113,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="#A5B857"
+            android:backgroundTint="@color/green_button"
             android:text="Log Out"
             android:textColor="@color/white"
             android:textSize="16sp" />

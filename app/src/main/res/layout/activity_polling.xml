@@ -2,43 +2,67 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    android:background="@color/background_light_green"
+    android:orientation="vertical"
+    android:padding="16dp">
     <ListView
         android:id="@+id/pollListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:background="@color/white" />
+
 
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#49B7EC"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/adamina"
+        android:shadowColor="@color/background_green"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
         android:text="Today's Responses: 18"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textColor="@color/gold_button"
+        android:textSize="28sp"
         android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/black" />
+
 
     <TextView
         android:id="@+id/textViewDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/adamina"
+        android:shadowColor="@color/background_green"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
         android:text="Tomorrow class change to "
-        android:textSize="24sp" />
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"></RadioGroup>
+        android:orientation="vertical" />
 
     <ImageButton
         android:id="@+id/buttonAddOption"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
+        android:layout_marginTop="40dp"
         android:scaleType="fitCenter"
         android:src="@drawable/plus_sign" />
 
@@ -46,5 +70,8 @@
         android:id="@+id/buttonSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/gold_button"
         android:text="Submit" />
 </LinearLayout>

@@ -28,7 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NewEvent extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityCourseSelectionBinding;
+import my.edu.utar.call_group.databinding.ActivityNewEventBinding;
+
+public class NewEvent extends BaseActivity {
+    ActivityNewEventBinding activityNewEventBinding;
 
     ArrayList<String> selectedCourses = new ArrayList<>(); // Initialize with an empty ArrayList
     private TextView textViewNewEvent;
@@ -39,7 +43,9 @@ public class NewEvent extends AppCompatActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_new_event);
+            activityNewEventBinding = ActivityNewEventBinding.inflate(getLayoutInflater());
+            setContentView(activityNewEventBinding.getRoot());
+            allocatedActivityTitle("NEW EVENT");
 
             spinnerCourse = findViewById(R.id.spinnerCourse);
             editTextEventName = findViewById(R.id.editTextEvent);

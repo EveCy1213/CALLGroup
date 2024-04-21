@@ -74,7 +74,7 @@ public class LecturerActivity extends BaseActivity {
                 loadTimetableForWeek(selectedWeek);
 
                 weekListView.setVisibility(View.GONE);
-allocatedActivityTitle("TIMETABLE");
+                allocatedActivityTitle("TIMETABLE");
             }
         });
 
@@ -122,7 +122,7 @@ allocatedActivityTitle("TIMETABLE");
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
                                     String documentID = document.getId();
-                                    updateTimetable(startTime, endTime, week , day, courseCode, courseName,documentID);
+                                    updateTimetable(startTime, endTime, week, day, courseCode, courseName, documentID);
                                 }
                             } else {
                                 Toast.makeText(LecturerActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -139,11 +139,12 @@ allocatedActivityTitle("TIMETABLE");
             TextView dayTextView = new TextView(this);
             dayTextView.setText(day);
             dayTextView.setGravity(Gravity.CENTER);
-            dayTextView.setBackgroundResource(R.drawable.table); // Add border background
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.MATCH_PARENT
+            );
             dayTextView.setBackgroundColor(getColor(R.color.background_green));
             dayTextView.setTextColor(getColor(R.color.white));
-            dayTextView.setPadding(10, 10, 10, 10);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
             dayTextView.setLayoutParams(params);
             headerRow.addView(dayTextView);
         }
@@ -157,7 +158,14 @@ allocatedActivityTitle("TIMETABLE");
             row.setGravity(Gravity.CENTER_VERTICAL);
             TextView timeTextView = new TextView(this);
             timeTextView.setText(timeSlot);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    TableRow.LayoutParams.MATCH_PARENT
+            );
+            timeTextView.setLayoutParams(params);
             timeTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            timeTextView.setBackgroundResource(R.drawable.table_time_cell);
+            timeTextView.setTextColor(getColor(R.color.white));
             row.addView(timeTextView);
 
             for (int i = 0; i < daysOfWeek.length - 1; i++) {
@@ -179,7 +187,8 @@ allocatedActivityTitle("TIMETABLE");
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-    private void updateTimetable(String startTime, String endTime,String week, String day,String courseCode, String course , String documentID) {
+
+    private void updateTimetable(String startTime, String endTime, String week, String day, String courseCode, String course, String documentID) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -212,9 +221,9 @@ allocatedActivityTitle("TIMETABLE");
                                 intent.putExtra("courseName", course);
                                 intent.putExtra("week", week);
                                 intent.putExtra("day", day);
-                                intent.putExtra("startTime",startTime);
-                                intent.putExtra("endTime",endTime);
-                                intent.putExtra("documentId",documentID);
+                                intent.putExtra("startTime", startTime);
+                                intent.putExtra("endTime", endTime);
+                                intent.putExtra("documentId", documentID);
                                 // Start the activity with the intent
                                 startActivity(intent);
                             }
@@ -251,9 +260,9 @@ allocatedActivityTitle("TIMETABLE");
                                     intent.putExtra("courseName", course);
                                     intent.putExtra("week", week);
                                     intent.putExtra("day", day);
-                                    intent.putExtra("startTime",startTime);
-                                    intent.putExtra("endTime",endTime);
-                                    intent.putExtra("documentId",documentID);
+                                    intent.putExtra("startTime", startTime);
+                                    intent.putExtra("endTime", endTime);
+                                    intent.putExtra("documentId", documentID);
                                     // Start the activity with the intent
                                     startActivity(intent);
                                 }

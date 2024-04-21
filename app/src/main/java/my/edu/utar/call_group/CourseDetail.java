@@ -29,8 +29,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CourseDetail extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityCourseDetailBinding;
+import my.edu.utar.call_group.databinding.ActivityCourseSelectionBinding;
 
+public class CourseDetail extends BaseActivity {
+    ActivityCourseDetailBinding activityCourseDetailBinding;
     private TextView textViewCourseDetail, textViewCourseCode, textViewCourseName , textViewFileUploaded;
     private Spinner spinnerWeek, spinnerDay, spinnerStartTime, spinnerEndTime;
     private Button buttonUploadFile, buttonSave;
@@ -44,7 +47,9 @@ public class CourseDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_course_detail);
+        activityCourseDetailBinding = ActivityCourseDetailBinding.inflate(getLayoutInflater());
+        setContentView(activityCourseDetailBinding.getRoot());
+        allocatedActivityTitle("COURSE DETAILS");
 
 //        textViewCourseDetail = findViewById(R.id.textViewCourseDetail);
         textViewCourseCode = findViewById(R.id.textViewCourseCode);
