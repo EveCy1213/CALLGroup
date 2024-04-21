@@ -53,7 +53,7 @@ public class StudentActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         activityStudentBinding = ActivityStudentBinding.inflate(getLayoutInflater());
         setContentView(activityStudentBinding.getRoot());
-        allocatedActivityTitle("SELECT WEEK");
+        allocatedActivityTitle("TIMETABLE");
 
         db = FirebaseFirestore.getInstance();
 
@@ -114,7 +114,11 @@ public class StudentActivity extends BaseActivity {
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
                                     String remark = document.getString("Remark");
-                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName, remark);
+                                    String documentUrl = document.getString("File Url");
+                                    if (documentUrl != null ){
+                                        documentUrl = "";
+                                    }
+                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName, remark,documentUrl);
                                 }
                             } else {
                                 Toast.makeText(StudentActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -167,7 +171,7 @@ public class StudentActivity extends BaseActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-    private void updateTimetable(String startTime, String endTime, String week, String day,String courseCode, String course, String remark) {
+    private void updateTimetable(String startTime, String endTime, String week, String day,String courseCode, String course, String remark , String documentUrl) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -204,6 +208,7 @@ public class StudentActivity extends BaseActivity {
                                 intent.putExtra("startTime",startTime);
                                 intent.putExtra("endTime",endTime);
                                 intent.putExtra("remark",remark);
+                                intent.putExtra("documentUrl",documentUrl);
                                 // Start the activity with the intent
                                 startActivity(intent);
                             }

@@ -28,7 +28,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class LecturerActivity extends AppCompatActivity {
+import my.edu.utar.call_group.databinding.ActivityLecturerBinding;
+
+public class LecturerActivity extends BaseActivity {
+
+    ActivityLecturerBinding activityLecturerBinding;
 
     private ArrayList<String> selectedCourses;
     private FirebaseFirestore db;
@@ -44,7 +48,9 @@ public class LecturerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lecturer);
+        activityLecturerBinding = ActivityLecturerBinding.inflate(getLayoutInflater());
+        setContentView(activityLecturerBinding.getRoot());
+        allocatedActivityTitle("SELECT WEEK");
 
         db = FirebaseFirestore.getInstance();
 
@@ -68,17 +74,10 @@ public class LecturerActivity extends AppCompatActivity {
                 loadTimetableForWeek(selectedWeek);
 
                 weekListView.setVisibility(View.GONE);
+allocatedActivityTitle("TIMETABLE");
             }
         });
 
-        Button btnPolling = findViewById(R.id.pollingButton);
-        btnPolling.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LecturerActivity.this, Polling.class);
-                startActivity(intent);
-            }
-        });
 
         Button newEventButton = findViewById(R.id.newEventButton);
         newEventButton.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +139,11 @@ public class LecturerActivity extends AppCompatActivity {
             TextView dayTextView = new TextView(this);
             dayTextView.setText(day);
             dayTextView.setGravity(Gravity.CENTER);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            dayTextView.setBackgroundResource(R.drawable.table); // Add border background
+            dayTextView.setBackgroundColor(getColor(R.color.background_green));
+            dayTextView.setTextColor(getColor(R.color.white));
+            dayTextView.setPadding(10, 10, 10, 10);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
             dayTextView.setLayoutParams(params);
             headerRow.addView(dayTextView);
         }

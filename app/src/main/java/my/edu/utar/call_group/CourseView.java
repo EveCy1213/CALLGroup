@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -68,6 +69,7 @@ public class CourseView extends BaseActivity {
         String day = intent.getStringExtra("day");
         String startTime = intent.getStringExtra("startTime");
         String endTime = intent.getStringExtra("endTime");
+        String documentUrl = intent.getStringExtra("documentUrl");
         String remark = intent.getStringExtra("remark");
 
         textViewCourseName.setText(courseName);
@@ -83,8 +85,8 @@ public class CourseView extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // Perform the download operation here
-                Uri fileUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/callgroup-25079.appspot.com/o/files%2Fimage%3A1000000028?alt=media&token=e6423ce0-eff1-4f95-ba12-c09f82899821");
-                String fileName = "CourseMaterial.jpg";
+                Uri fileUri = Uri.parse(documentUrl);
+                String fileName = "fileUri";
                 downloadFileFromUri(fileUri, fileName);
             }
         });
@@ -96,6 +98,20 @@ public class CourseView extends BaseActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
         if (fileUri != null && !fileUri.toString().isEmpty()) {
+            // Get the file extension from the URI
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
+
+            // Get the MIME type of the file
+            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+
+            // Check if MIME type is available
+            if (mimeType != null) {
+                // Set the filename with the correct file format
+                fileName += "." + MimeTypeMap.getFileExtensionFromUrl(mimeType);
+            } else {
+                // Default to using the file extension as the format
+                fileName += "." + fileExtension;
+            }
 
             // Get a reference to the storage location using the file URI
             StorageReference storageRef = storage.getReferenceFromUrl(fileUri.toString());

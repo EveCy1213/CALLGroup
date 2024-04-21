@@ -31,7 +31,7 @@
         android:id="@+id/selectWeekButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Timetable"
+        android:text="SELECT WEEK"
         android:backgroundTint="@color/gold_button"
         android:textColor="@android:color/white"
         android:layout_marginTop="8dp"/>

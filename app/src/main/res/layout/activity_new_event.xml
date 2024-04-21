@@ -2,70 +2,132 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#bccab2">
 
     <TextView
-        android:id="@+id/textViewNewEvent"
+        android:id="@+id/textViewCourseDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="@font/adamina"
+        android:shadowColor="@color/background_green"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
         android:text="New Event"
-        android:textSize="20sp"
-        android:padding="8dp"/>
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/black"/>
 
     <Spinner
         android:id="@+id/spinnerCourse"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:id="@+id/editTextEvent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Event Name"
+        android:textSize="18sp"
+        android:fontFamily="@font/adamina"
         android:maxLines="5"/>
 
     <Spinner
         android:id="@+id/spinnerWeek"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:elevation="4dp"/>
 
     <Spinner
         android:id="@+id/spinnerDay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:elevation="4dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:shadowColor="@color/background_green"
+        android:textColor="@color/white"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:paddingLeft="2dp"
         android:text="Start Time"/>
     <Spinner
         android:id="@+id/spinnerStartTime"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:elevation="4dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/black"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:fontFamily="@font/adamina"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:paddingLeft="2dp"
+        android:textColor="@color/white"
+        android:shadowColor="@color/background_green"
+        android:shadowDx="2"
+        android:shadowDy="2"
         android:text="End Time"/>
     <Spinner
         android:id="@+id/spinnerEndTime"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:elevation="4dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
 
         <Button
             android:id="@+id/buttonCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/gold_button"
             android:text="Cancel"/>
 
         <Button
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/gold_button"
             android:text="Save"/>
     </LinearLayout>
 </LinearLayout>

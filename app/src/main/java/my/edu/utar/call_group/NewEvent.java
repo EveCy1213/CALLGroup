@@ -49,7 +49,7 @@ public class NewEvent extends AppCompatActivity {
             spinnerEndTime = findViewById(R.id.spinnerEndTime);
             buttonSave = findViewById(R.id.buttonSave);
             buttonCancel = findViewById(R.id.buttonCancel);
-            textViewNewEvent = findViewById(R.id.textViewNewEvent);
+//            textViewNewEvent = findViewById(R.id.textViewNewEvent);
 
             Intent intent = getIntent();
 
