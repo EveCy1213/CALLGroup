@@ -44,11 +44,16 @@ public class StudentActivity extends BaseActivity {
     private ArrayAdapter<String> weekAdapter;
 
     @Override
+    public void onBackPressed() {
+        weekListView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityStudentBinding = ActivityStudentBinding.inflate(getLayoutInflater());
         setContentView(activityStudentBinding.getRoot());
-        allocatedActivityTitle("SELECT WEEK");
+        allocatedActivityTitle("TIMETABLE");
 
         db = FirebaseFirestore.getInstance();
 
@@ -72,21 +77,6 @@ public class StudentActivity extends BaseActivity {
                 loadTimetableForWeek(selectedWeek);
 
                 weekListView.setVisibility(View.GONE);
-                allocatedActivityTitle("TIMETABLE");
-            }
-        });
-
-        Button btnEditCourses = findViewById(R.id.editCoursesButton);
-        btnEditCourses.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StudentActivity.this, CourseSelection.class);
-                intent.putStringArrayListExtra("selectedCourses", selectedCourses);
-                intent.putExtra("sourceActivity", "StudentActivity");
-                intent.putExtra("userRole", "student");
-                startActivity(intent);
-
-
             }
         });
     }
@@ -124,7 +114,11 @@ public class StudentActivity extends BaseActivity {
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
                                     String remark = document.getString("Remark");
-                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName, remark);
+                                    String documentUrl = document.getString("File Url");
+                                    if (documentUrl != null ){
+                                        documentUrl = "";
+                                    }
+                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName, remark,documentUrl);
                                 }
                             } else {
                                 Toast.makeText(StudentActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -141,9 +135,7 @@ public class StudentActivity extends BaseActivity {
             TextView dayTextView = new TextView(this);
             dayTextView.setText(day);
             dayTextView.setGravity(Gravity.CENTER);
-            dayTextView.setBackgroundResource(R.drawable.table); // Add border background
-            dayTextView.setPadding(10, 10, 10, 10);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
             dayTextView.setLayoutParams(params);
             headerRow.addView(dayTextView);
         }
@@ -156,7 +148,6 @@ public class StudentActivity extends BaseActivity {
             TableRow row = new TableRow(this);
             row.setGravity(Gravity.CENTER_VERTICAL);
             TextView timeTextView = new TextView(this);
-            timeTextView.setPadding(10, 10, 10, 10);
             timeTextView.setText(timeSlot);
             timeTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
             row.addView(timeTextView);
@@ -180,71 +171,99 @@ public class StudentActivity extends BaseActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-    private void updateTimetable(String startTime, String endTime, String week, String day,String courseCode, String course, String remark) {
+
+    private void updateTimetable(String startTime, String endTime, String week, String day, String courseCode, String course, String remark, String documentUrl) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
 
         if (columnIndex >= 0 && startRowIndex >= 0 && endRowIndex >= 0) {
-
             if (startRowIndex == endRowIndex) {
                 TableRow row = (TableRow) tableLayout.getChildAt(startRowIndex + 1);
                 if (row != null) {
                     TextView cell = (TextView) row.getChildAt(columnIndex);
                     if (cell != null) {
-
                         String currentText = cell.getText().toString();
                         if (!currentText.isEmpty()) {
                             currentText += "\n";
                         }
                         cell.setText(currentText + course);
                         cell.setGravity(Gravity.CENTER);
-                        cell.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-                        cell.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // Get the course name from the text of the clicked cell
-                                String courseName = ((TextView) v).getText().toString();
-
-                                // Create an intent
-                                Intent intent = new Intent(getApplicationContext(), CourseView.class);
-
-                                // Put the course name as an extra in the intent
-                                intent.putExtra("courseCode", courseCode);
-                                intent.putExtra("courseName", course);
-                                intent.putExtra("week", week);
-                                intent.putExtra("day", day);
-                                intent.putExtra("startTime",startTime);
-                                intent.putExtra("endTime",endTime);
-                                intent.putExtra("remark",remark);
-                                // Start the activity with the intent
-                                startActivity(intent);
-                            }
-                        });
+                        cell.setBackgroundResource(android.R.color.holo_blue_light);
+                        setOnClickListenerForCell(cell, courseCode, course, week, day, startTime, endTime, remark, documentUrl);
                     }
                 }
             } else {
-
+                int color = getEventColor(startRowIndex); // Get color for the event
                 for (int i = startRowIndex; i <= endRowIndex; i++) {
                     TableRow row = (TableRow) tableLayout.getChildAt(i + 1);
                     if (row != null) {
                         TextView cell = (TextView) row.getChildAt(columnIndex);
                         if (cell != null) {
-
-                            String currentText = cell.getText().toString();
-                            if (!currentText.isEmpty()) {
-                                currentText += "\n";
+                            String currentText = "";
+                            if (i == startRowIndex) { // Only update the first row of the event
+                                currentText = cell.getText().toString();
+                                if (!currentText.isEmpty()) {
+                                    currentText += "\n";
+                                }
+                                currentText += course;
                             }
-                            cell.setText(currentText + course);
-                            //cell.setGravity(Gravity.CENTER);
+                            cell.setText(currentText);
                             cell.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-                            cell.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                            cell.setBackgroundColor(color);
+                            setOnClickListenerForCell(cell, courseCode, course, week, day, startTime, endTime, remark, documentUrl);
                         }
                     }
                 }
             }
         }
     }
+
+    // Set onClickListener for the cell
+    private void setOnClickListenerForCell(TextView cell, String courseCode, String course, String week, String day, String startTime, String endTime, String remark, String documentUrl) {
+        cell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the course name from the text of the clicked cell
+                String courseName = ((TextView) v).getText().toString();
+
+                // Create an intent
+                Intent intent = new Intent(getApplicationContext(), CourseView.class);
+
+                // Put the course details as extras in the intent
+                intent.putExtra("courseCode", courseCode);
+                intent.putExtra("courseName", course);
+                intent.putExtra("week", week);
+                intent.putExtra("day", day);
+                intent.putExtra("startTime", startTime);
+                intent.putExtra("endTime", endTime);
+                intent.putExtra("remark", remark);
+                intent.putExtra("documentUrl", documentUrl);
+
+                // Start the activity with the intent
+                startActivity(intent);
+            }
+        });
+    }
+
+    // Get color for the event
+    private int getEventColor(int rowIndex) {
+        int[] eventColors = {
+                android.R.color.holo_blue_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_purple,
+                android.R.color.holo_blue_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_purple
+        };
+        int colorIndex = rowIndex % eventColors.length;
+        return getResources().getColor(eventColors[colorIndex]);
+    }
+
 
     private int getColumnIndex(String dayOfWeek) {
         switch (dayOfWeek) {

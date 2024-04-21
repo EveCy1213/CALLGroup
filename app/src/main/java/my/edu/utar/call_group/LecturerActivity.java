@@ -28,10 +28,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import my.edu.utar.call_group.databinding.ActivityCourseDetailBinding;
 import my.edu.utar.call_group.databinding.ActivityLecturerBinding;
 
 public class LecturerActivity extends BaseActivity {
+
     ActivityLecturerBinding activityLecturerBinding;
 
     private ArrayList<String> selectedCourses;
@@ -39,6 +39,11 @@ public class LecturerActivity extends BaseActivity {
     private TableLayout tableLayout;
     private ListView weekListView;
     private ArrayAdapter<String> weekAdapter;
+
+    @Override
+    public void onBackPressed() {
+        weekListView.setVisibility(View.VISIBLE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,30 +74,19 @@ public class LecturerActivity extends BaseActivity {
                 loadTimetableForWeek(selectedWeek);
 
                 weekListView.setVisibility(View.GONE);
-                allocatedActivityTitle("TIMETABLE");
+allocatedActivityTitle("TIMETABLE");
             }
         });
 
-//        Button btnPolling = findViewById(R.id.pollingButton);
-//        btnPolling.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LecturerActivity.this, Polling.class);
-//                startActivity(intent);
-//            }
-//        });
 
-//        Button btnEditCourses = findViewById(R.id.editCoursesButton);
-//        btnEditCourses.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(LecturerActivity.this, CourseSelection.class);
-//                intent.putStringArrayListExtra("selectedCourses", selectedCourses);
-//                intent.putExtra("sourceActivity", "LecturerActivity");
-//                intent.putExtra("userRole", "lecturer");
-//                startActivity(intent);
-//            }
-//        });
+        Button newEventButton = findViewById(R.id.newEventButton);
+        newEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LecturerActivity.this, NewEvent.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void loadTimetableForWeek(final String selectedWeek) {
@@ -127,7 +121,8 @@ public class LecturerActivity extends BaseActivity {
                                     String startTime = document.getString("Start Time");
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
-                                    updateTimetable(startTime, endTime, week , day, courseCode, courseName);
+                                    String documentID = document.getId();
+                                    updateTimetable(startTime, endTime, week , day, courseCode, courseName,documentID);
                                 }
                             } else {
                                 Toast.makeText(LecturerActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -144,7 +139,11 @@ public class LecturerActivity extends BaseActivity {
             TextView dayTextView = new TextView(this);
             dayTextView.setText(day);
             dayTextView.setGravity(Gravity.CENTER);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+            dayTextView.setBackgroundResource(R.drawable.table); // Add border background
+            dayTextView.setBackgroundColor(getColor(R.color.background_green));
+            dayTextView.setTextColor(getColor(R.color.white));
+            dayTextView.setPadding(10, 10, 10, 10);
+            TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
             dayTextView.setLayoutParams(params);
             headerRow.addView(dayTextView);
         }
@@ -168,7 +167,6 @@ public class LecturerActivity extends BaseActivity {
                 TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
                 emptyTextView.setLayoutParams(cellParams);
                 row.addView(emptyTextView);
-
             }
 
             TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, convertDpToPixel(100));
@@ -181,7 +179,7 @@ public class LecturerActivity extends BaseActivity {
         float density = getResources().getDisplayMetrics().density;
         return Math.round(dp * density);
     }
-    private void updateTimetable(String startTime, String endTime,String week, String day,String courseCode, String course) {
+    private void updateTimetable(String startTime, String endTime,String week, String day,String courseCode, String course , String documentID) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -216,11 +214,11 @@ public class LecturerActivity extends BaseActivity {
                                 intent.putExtra("day", day);
                                 intent.putExtra("startTime",startTime);
                                 intent.putExtra("endTime",endTime);
+                                intent.putExtra("documentId",documentID);
                                 // Start the activity with the intent
                                 startActivity(intent);
                             }
                         });
-
                     }
                 }
             } else {
@@ -249,7 +247,13 @@ public class LecturerActivity extends BaseActivity {
                                     Intent intent = new Intent(getApplicationContext(), CourseDetail.class);
 
                                     // Put the course name as an extra in the intent
-                                    intent.putExtra("courseName", courseName);
+                                    intent.putExtra("courseCode", courseCode);
+                                    intent.putExtra("courseName", course);
+                                    intent.putExtra("week", week);
+                                    intent.putExtra("day", day);
+                                    intent.putExtra("startTime",startTime);
+                                    intent.putExtra("endTime",endTime);
+                                    intent.putExtra("documentId",documentID);
                                     // Start the activity with the intent
                                     startActivity(intent);
                                 }

@@ -5,18 +5,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,6 +34,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password_edit_text;
     private RadioGroup login_group;
     private FirebaseAuth mAuth;
+    ProgressBar progressBar;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +44,20 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth=FirebaseAuth.getInstance();
-        username_edit_text=findViewById(R.id.settings_username);
+        username_edit_text=findViewById(R.id.username);
         password_edit_text=findViewById(R.id.password);
-        login_group=findViewById(R.id.login_as_group);
+//        login_group=findViewById(R.id.login_as_group);
+        progressBar = findViewById(R.id.progressBar);
+
+
 
         Button loginButton=findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 login_check();
+
             }
         });
 
@@ -72,11 +85,15 @@ public class LoginActivity extends AppCompatActivity {
 
         if (username.isEmpty()) {
             Toast.makeText(LoginActivity.this, "Enter Email.", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
             return;
         } else if (password.isEmpty()) {
             Toast.makeText(LoginActivity.this, "Enter Password.", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
             return;
         }
+
+
 
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -84,29 +101,52 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            int checkedId = login_group.getCheckedRadioButtonId();
-
-                            String userType;
-                            if (checkedId == R.id.login_as_student) {
-                                userType = "student";
-                            } else if (checkedId == R.id.login_as_lecturer) {
-                                userType = "lecturer";
-                            } else {
-
-                                userType = "student"; // default to student
-                            }
-
                             FirebaseUser user = mAuth.getCurrentUser();
-                            checkIfCoursesSelected(user, userType);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            if (user != null) {
+                                String uid = user.getUid();
+
+                                // Construct the document reference
+                                DocumentReference userRef = FirebaseFirestore.getInstance().collection("Users").document(uid);
+
+                                // Fetch the document
+                                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            // Document exists, retrieve the user's role
+                                            String userType;
+                                            userType = documentSnapshot.getString("role");
+                                            Toast.makeText(LoginActivity.this, "Logged in as " + userType, Toast.LENGTH_SHORT).show();
+
+                                            checkIfCoursesSelected(user, userType);
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Error fetching document
+                                    }
+                                });
+
+//                            if (checkedId == R.id.login_as_student) {
+//                                userType = "student";
+//                            } else if (checkedId == R.id.login_as_lecturer) {
+//                                userType = "lecturer";
+//                            } else {
+//                                userType = "student"; // default to student
+//                            }
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+                            }
                         }
                     }
                 });
-    }
+    };
 
     private void checkIfCoursesSelected(FirebaseUser user, String userType) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Log.d("userType",userType);
         db.collection("Users").document(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -118,18 +158,20 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, CourseSelection.class);
                         intent.putExtra("userRole", userType);
                         startActivity(intent);
+                        finish();
                     } else {
-
                         Class<?> activityClass = "student".equals(userType) ? StudentActivity.class : LecturerActivity.class;
                         Intent intent = new Intent(LoginActivity.this, activityClass);
                         intent.putStringArrayListExtra("selectedCourses", new ArrayList<>(courses));
                         intent.putExtra("userRole", userType);
                         startActivity(intent);
+                        finish();
                     }
                 } else {
                     Intent intent = new Intent(LoginActivity.this, CourseSelection.class);
                     intent.putExtra("userRole", userType);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

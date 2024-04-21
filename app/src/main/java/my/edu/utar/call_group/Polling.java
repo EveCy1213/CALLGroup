@@ -47,11 +47,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import my.edu.utar.call_group.databinding.ActivityCourseDetailBinding;
-import my.edu.utar.call_group.databinding.ActivityPollingBinding;
+public class Polling extends AppCompatActivity {
 
-public class Polling extends BaseActivity {
-ActivityPollingBinding activityPollingBinding;
     private RadioGroup radioGroupOption;
     private ImageButton buttonAddOption;
     private Button buttonSubmit;
@@ -70,10 +67,7 @@ ActivityPollingBinding activityPollingBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityPollingBinding = ActivityPollingBinding.inflate(getLayoutInflater());
-        setContentView(activityPollingBinding.getRoot());
-        allocatedActivityTitle("POLL");
-
+        setContentView(R.layout.activity_polling);
         pollListView = findViewById(R.id.pollListView);
         CollectionReference pollsCollection = FirebaseFirestore.getInstance().collection("Polls");
 

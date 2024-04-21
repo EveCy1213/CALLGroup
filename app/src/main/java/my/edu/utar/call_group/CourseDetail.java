@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,11 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import my.edu.utar.call_group.databinding.ActivityCourseDetailBinding;
-import my.edu.utar.call_group.databinding.ActivityCourseSelectionBinding;
+public class CourseDetail extends AppCompatActivity {
 
-public class CourseDetail extends BaseActivity {
-    ActivityCourseDetailBinding activityCourseDetailBinding;
     private TextView textViewCourseDetail, textViewCourseCode, textViewCourseName , textViewFileUploaded;
     private Spinner spinnerWeek, spinnerDay, spinnerStartTime, spinnerEndTime;
     private Button buttonUploadFile, buttonSave;
@@ -46,11 +44,9 @@ public class CourseDetail extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityCourseDetailBinding = ActivityCourseDetailBinding.inflate(getLayoutInflater());
-        setContentView(activityCourseDetailBinding.getRoot());
-        allocatedActivityTitle("COURSE DETAIL");
+        setContentView(R.layout.activity_course_detail);
 
-        textViewCourseDetail = findViewById(R.id.textViewCourseDetail);
+//        textViewCourseDetail = findViewById(R.id.textViewCourseDetail);
         textViewCourseCode = findViewById(R.id.textViewCourseCode);
         textViewCourseName = findViewById(R.id.textViewCourseName);
         textViewFileUploaded = findViewById(R.id.textViewFileUploaded);
@@ -119,9 +115,10 @@ public class CourseDetail extends BaseActivity {
                 courseDetails.put("Start Time", selectedStartTime);
                 courseDetails.put("End Time", selectedEndTime);
                 courseDetails.put("Remarks",remarks);
-                if (selectedFileUri != null) {
+                if (fileUrlinFirebase != null) {
 //                    uploadFileToStorage(selectedFileUri);
-                    courseDetails.put("File Url", fileUrlinFirebase);
+                        courseDetails.put("File Url", fileUrlinFirebase);
+                        Log.d("FirebaseStorage 2", fileUrlinFirebase);  // Provide a tag for the log message
                 }
 
                 // Add a new document to the "courses" collection
@@ -174,10 +171,12 @@ public class CourseDetail extends BaseActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 // Store the download URL
-                                fileUrlinFirebase = uri.toString();
+                                String downloadUri = uri.toString();
+                                fileUrlinFirebase = downloadUri;
+                                textViewFileUploaded.setText("File uploaded: " + fileUri.toString());
+                                Log.d("FirebaseStorage 1", downloadUri);  // Provide a tag for the log message
                             }
                         });
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -199,8 +198,6 @@ public class CourseDetail extends BaseActivity {
                 if (fileUri != null) { // Add null check
                     // Upload the file to Firebase Storage
                     uploadFileToStorage(fileUri);
-
-                    textViewFileUploaded.setText("File uploaded: " + fileUri.toString());
                 }
             }
         }
