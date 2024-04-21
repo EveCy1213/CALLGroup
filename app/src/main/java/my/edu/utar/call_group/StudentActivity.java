@@ -96,6 +96,7 @@ public class StudentActivity extends BaseActivity {
 
         // Loop through each selected course and query timetable details from Firestore
         for (String course : selectedCourses) {
+            Log.d("courseName",course);
             String[] parts = course.split(" - ");
             final String courseCode = parts[0].trim();
             final String courseName = parts[1].trim();
@@ -192,6 +193,7 @@ public class StudentActivity extends BaseActivity {
         if (columnIndex >= 0 && startRowIndex >= 0 && endRowIndex >= 0) {
             if (startRowIndex == endRowIndex) {
                 TableRow row = (TableRow) tableLayout.getChildAt(startRowIndex + 1);
+                int color = getEventColor(startRowIndex); // Get color for the event
                 if (row != null) {
                     TextView cell = (TextView) row.getChildAt(columnIndex);
                     if (cell != null) {
@@ -199,9 +201,9 @@ public class StudentActivity extends BaseActivity {
                         if (!currentText.isEmpty()) {
                             currentText += "\n";
                         }
-                        cell.setText(currentText + course);
-                        cell.setGravity(Gravity.CENTER);
-                        cell.setBackgroundResource(android.R.color.holo_blue_light);
+                        cell.setText(currentText + courseCode);
+                        cell.setGravity(Gravity.START);
+                        cell.setBackgroundColor(color);
                         setOnClickListenerForCell(cell, courseCode, course, week, day, startTime, endTime, remark, documentUrl);
                     }
                 }
@@ -218,10 +220,10 @@ public class StudentActivity extends BaseActivity {
                                 if (!currentText.isEmpty()) {
                                     currentText += "\n";
                                 }
-                                currentText += course;
+                                currentText += courseCode;
                             }
                             cell.setText(currentText);
-                            cell.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+                            cell.setGravity(Gravity.START);
                             cell.setBackgroundColor(color);
                             setOnClickListenerForCell(cell, courseCode, course, week, day, startTime, endTime, remark, documentUrl);
                         }
@@ -265,18 +267,17 @@ public class StudentActivity extends BaseActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light,
-                android.R.color.system_primary_container_dark,
                 android.R.color.holo_purple,
                 android.R.color.holo_blue_light,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light,
-                android.R.color.system_primary_container_dark,
                 android.R.color.holo_purple
         };
         int colorIndex = rowIndex % eventColors.length;
         return getResources().getColor(eventColors[colorIndex]);
     }
+
 
 
     private int getColumnIndex(String dayOfWeek) {
