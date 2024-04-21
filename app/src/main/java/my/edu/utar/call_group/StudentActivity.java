@@ -231,6 +231,29 @@ public class StudentActivity extends BaseActivity {
                             //cell.setGravity(Gravity.CENTER);
                             cell.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
                             cell.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+
+                            cell.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // Get the course name from the text of the clicked cell
+                                    String courseName = ((TextView) v).getText().toString();
+
+                                    // Create an intent
+                                    Intent intent = new Intent(getApplicationContext(), CourseView.class);
+
+                                    // Put the course name as an extra in the intent
+                                    intent.putExtra("courseCode", courseCode);
+                                    intent.putExtra("courseName", course);
+                                    intent.putExtra("week", week);
+                                    intent.putExtra("day", day);
+                                    intent.putExtra("startTime",startTime);
+                                    intent.putExtra("endTime",endTime);
+                                    intent.putExtra("remark",remark);
+                                    intent.putExtra("documentUrl",documentUrl);
+                                    // Start the activity with the intent
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     }
                 }
