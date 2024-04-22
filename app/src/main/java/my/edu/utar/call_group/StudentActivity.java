@@ -137,8 +137,9 @@ public class StudentActivity extends BaseActivity {
             dayTextView.setText(day);
             dayTextView.setGravity(Gravity.CENTER);
             TableRow.LayoutParams params = new TableRow.LayoutParams(
-                    TableRow.LayoutParams.WRAP_CONTENT,
-                    TableRow.LayoutParams.MATCH_PARENT
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    1f
             );
             dayTextView.setBackgroundColor(getColor(R.color.background_green));
             dayTextView.setTextColor(getColor(R.color.white));
@@ -155,12 +156,12 @@ public class StudentActivity extends BaseActivity {
             row.setGravity(Gravity.CENTER_VERTICAL);
             TextView timeTextView = new TextView(this);
             timeTextView.setText(timeSlot);
-            TableRow.LayoutParams params = new TableRow.LayoutParams(
+            TableRow.LayoutParams timeParams = new TableRow.LayoutParams(
                     TableRow.LayoutParams.WRAP_CONTENT,
                     TableRow.LayoutParams.MATCH_PARENT
             );
-            timeTextView.setLayoutParams(params);
-            timeTextView.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            timeTextView.setLayoutParams(timeParams);
+            timeTextView.setGravity(Gravity.CENTER);
             timeTextView.setBackgroundResource(R.drawable.table_time_cell);
             timeTextView.setTextColor(getColor(R.color.white));
             row.addView(timeTextView);
