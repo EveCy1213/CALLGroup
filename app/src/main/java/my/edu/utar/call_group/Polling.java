@@ -79,7 +79,7 @@ public class Polling extends BaseActivity {
         setContentView(activityPollingBinding.getRoot());
         allocatedActivityTitle("POLLING");
 
-//        pollListView = findViewById(R.id.pollListView);
+        pollListView = findViewById(R.id.pollListView);
         CollectionReference pollsCollection = FirebaseFirestore.getInstance().collection("Polls");
 
         //  Query all documents in the "Polls" collection
