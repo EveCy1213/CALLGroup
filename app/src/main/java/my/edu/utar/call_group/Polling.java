@@ -58,13 +58,18 @@ public class Polling extends BaseActivity {
     private FirebaseFirestore db;
     private ListView pollListView;
     private ArrayAdapter pollAdapter;
-    private TextView textViewTitle , textViewDescription;
+    private TextView textViewTitle , textViewDescription, textViewLecturer;
     private View percentageBar;
     private int totalResponse;
     private String selectedPoll;
     private FirebaseAuth mAuth;
     private RadioButton previouslySelectedRadioButton;
     private ArrayList<String> polls = new ArrayList<>();
+
+    @Override
+    public void onBackPressed() {
+        pollListView.setVisibility(View.VISIBLE);
+    }
 
 
     @Override
@@ -74,7 +79,7 @@ public class Polling extends BaseActivity {
         setContentView(activityPollingBinding.getRoot());
         allocatedActivityTitle("POLLING");
 
-        pollListView = findViewById(R.id.pollListView);
+//        pollListView = findViewById(R.id.pollListView);
         CollectionReference pollsCollection = FirebaseFirestore.getInstance().collection("Polls");
 
         //  Query all documents in the "Polls" collection
@@ -308,6 +313,34 @@ public class Polling extends BaseActivity {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     Map<String, Object> pollData = new HashMap<>();
                     pollData.put("Description", description);
+
+                    mAuth = FirebaseAuth.getInstance();
+                    FirebaseUser user = mAuth.getCurrentUser();
+
+                    String lecturer = "";
+                    if (user != null) {
+                        String userID = user.getUid();
+                        Log.d("UserID", userID); // Correct logging syntax
+                        DocumentReference docRef = db.collection("Users").document(userID);
+                        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    String lecturer = documentSnapshot.getString("lecturer");
+                                    // Now you have the user's role, you can perform actions based on it
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e("Firestore", "Error getting user role", e); // Log Firestore errors
+                            }
+                        });
+                    } else {
+                        Log.e("User", "User is null"); // Log if user is null
+                    }
+
+                    pollData.put("Lecturer",lecturer);
                     db.collection("Polls").document(newPollName).set(pollData)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

@@ -5,12 +5,12 @@
     android:background="@color/background_light_green"
     android:orientation="vertical"
     android:padding="16dp">
-    <ListView
-        android:id="@+id/pollListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:background="@color/white" />
+<!--    <ListView-->
+<!--        android:id="@+id/pollListView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:background="@color/white" />-->
 
 
     <TextView
@@ -47,6 +47,19 @@
         android:text="Tomorrow class change to "
         android:textColor="@color/white"
         android:textSize="16sp"
+        android:textStyle="bold" />
+
+        <TextView
+        android:id="@+id/textViewLecturer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shadowColor="@color/background_green"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:text="Created by : "
+        android:textColor="@color/white"
+        android:textSize="12sp"
         android:textStyle="bold" />
 
     <RadioGroup

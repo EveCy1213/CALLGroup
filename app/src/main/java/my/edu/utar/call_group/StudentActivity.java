@@ -183,7 +183,7 @@ public class StudentActivity extends BaseActivity {
                 TextView emptyTextView = new TextView(this);
                 emptyTextView.setText("");
                 emptyTextView.setGravity(Gravity.CENTER);
-                TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
                 emptyTextView.setLayoutParams(cellParams);
                 row.addView(emptyTextView);
             }

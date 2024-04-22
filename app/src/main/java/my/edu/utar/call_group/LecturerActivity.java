@@ -121,8 +121,9 @@ public class LecturerActivity extends BaseActivity {
                                     String startTime = document.getString("Start Time");
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
+                                    String event = document.getString("Event");
                                     String documentID = document.getId();
-                                    updateTimetable(startTime, endTime, week, day, courseCode, courseName, documentID);
+                                    updateTimetable(startTime, endTime, week, day, courseCode, courseName,event, documentID);
                                 }
                             } else {
                                 Toast.makeText(LecturerActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -173,7 +174,7 @@ public class LecturerActivity extends BaseActivity {
                 TextView emptyTextView = new TextView(this);
                 emptyTextView.setText("");
                 emptyTextView.setGravity(Gravity.CENTER);
-                TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                TableRow.LayoutParams cellParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1f);
                 emptyTextView.setLayoutParams(cellParams);
                 row.addView(emptyTextView);
             }
@@ -189,7 +190,7 @@ public class LecturerActivity extends BaseActivity {
         return Math.round(dp * density);
     }
 
-    private void updateTimetable(String startTime, String endTime, String week, String day, String courseCode, String course, String documentID) {
+    private void updateTimetable(String startTime, String endTime, String week, String day, String courseCode, String course,String event, String documentID) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -206,7 +207,7 @@ public class LecturerActivity extends BaseActivity {
                         if (!currentText.isEmpty()) {
                             currentText += "\n";
                         }
-                        cell.setText(currentText + courseCode);
+                        cell.setText(currentText + courseCode + "\n" + event);
                         cell.setGravity(Gravity.CENTER);
                         cell.setBackgroundColor(color);
                         setOnClickListenerForCell(cell, courseCode, course, week, day, startTime, endTime, documentID);
@@ -224,7 +225,7 @@ public class LecturerActivity extends BaseActivity {
                                 if (!currentText.isEmpty()) {
                                     currentText += "\n";
                                 }
-                                currentText += courseCode;
+                                currentText += courseCode + "\n" + event;
                             }
                             cell.setText(currentText);
                             cell.setGravity(Gravity.START);

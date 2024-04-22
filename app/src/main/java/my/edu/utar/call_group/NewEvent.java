@@ -74,6 +74,12 @@ public class NewEvent extends BaseActivity {
                     String selectedStartTime = spinnerStartTime.getSelectedItem().toString();
                     String selectedEndTime = spinnerEndTime.getSelectedItem().toString();
 
+                    if (compareTimes(selectedStartTime, selectedEndTime) > 0) {
+                        // Start time is later than end time, show error message
+                        Toast.makeText(NewEvent.this, "Start time cannot be later than end time.", Toast.LENGTH_SHORT).show();
+                        return; // Exit onClick method
+                    }
+
                     // Create a new Firestore instance
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -183,6 +189,52 @@ public class NewEvent extends BaseActivity {
             spinnerEndTime.setAdapter(timeAdapter);
             spinnerEndTime.setSelection(1);
         }
+
+    private int compareTimes(String time1, String time2) {
+        // Split time strings into hours, minutes, and AM/PM parts
+        String[] parts1 = time1.split(":");
+        String[] parts2 = time2.split(":");
+
+        int hour1 = Integer.parseInt(parts1[0]);
+        int hour2 = Integer.parseInt(parts2[0]);
+
+        int minute1 = Integer.parseInt(parts1[1].substring(0, 2));
+        int minute2 = Integer.parseInt(parts2[1].substring(0, 2));
+
+        String ampm1 = parts1[1].substring(2);
+        String ampm2 = parts2[1].substring(2);
+
+        // Convert hours to 24-hour format
+        if (ampm1.equals("PM") && hour1 != 12) {
+            hour1 += 12;
+        } else if (ampm1.equals("AM") && hour1 == 12) {
+            hour1 = 0;
+        }
+
+        if (ampm2.equals("PM") && hour2 != 12) {
+            hour2 += 12;
+        } else if (ampm2.equals("AM") && hour2 == 12) {
+            hour2 = 0;
+        }
+
+        // Compare hours
+        if (hour1 < hour2) {
+            return -1;
+        } else if (hour1 > hour2) {
+            return 1;
+        } else {
+            // Hours are equal, compare minutes
+            if (minute1 < minute2) {
+                return -1;
+            } else if (minute1 > minute2) {
+                return 1;
+            } else {
+                // Minutes are also equal
+                return 0;
+            }
+        }
+    }
+
 
     private void fetchUserSelectedCourses() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
