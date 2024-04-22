@@ -127,11 +127,12 @@ public class StudentActivity extends BaseActivity {
                                     String endTime = document.getString("End Time");
                                     String day = document.getString("Day");
                                     String remark = document.getString("Remark");
+                                    String event = document.getString("Event");
                                     String documentUrl = document.getString("File Url");
                                     if (documentUrl != null ){
                                         documentUrl = "";
                                     }
-                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName, remark,documentUrl);
+                                    updateTimetable(startTime, endTime, week, day,courseCode, courseName, event ,remark,documentUrl);
                                 }
                             } else {
                                 Toast.makeText(StudentActivity.this, "Failed to fetch course details for " + courseName, Toast.LENGTH_SHORT).show();
@@ -198,7 +199,7 @@ public class StudentActivity extends BaseActivity {
         return Math.round(dp * density);
     }
 
-    private void updateTimetable(String startTime, String endTime, String week, String day, String courseCode, String course, String remark, String documentUrl) {
+    private void updateTimetable(String startTime, String endTime, String week, String day, String courseCode, String course,String event, String remark, String documentUrl) {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
@@ -214,7 +215,7 @@ public class StudentActivity extends BaseActivity {
                         if (!currentText.isEmpty()) {
                             currentText += "\n";
                         }
-                        cell.setText(currentText + courseCode);
+                        cell.setText(currentText + courseCode + "\n" + event);
                         cell.setGravity(Gravity.START);
                         cell.setBackgroundColor(color);
                         setOnClickListenerForCell(cell, courseCode, course, week, day, startTime, endTime, remark, documentUrl);
@@ -232,7 +233,7 @@ public class StudentActivity extends BaseActivity {
                                 if (!currentText.isEmpty()) {
                                     currentText += "\n";
                                 }
-                                currentText += courseCode;
+                                currentText += courseCode + "\n" + event;
                             }
                             cell.setText(currentText);
                             cell.setGravity(Gravity.START);

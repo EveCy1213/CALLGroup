@@ -152,8 +152,6 @@ public class Polling extends BaseActivity {
             }
         });
 
-
-
         radioGroupOption = findViewById(R.id.radioGroup);
         buttonAddOption = findViewById(R.id.buttonAddOption);
         textViewTitle = findViewById(R.id.textViewTitle);
@@ -179,7 +177,7 @@ public class Polling extends BaseActivity {
                     // Increment the count for the selected option in Firestore
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     FieldPath fieldPath = FieldPath.of(selectedOptionKey.trim());
-                    db.collection("Polls").document("x0WKCeoXg378R5Zr0oY9")
+                    db.collection("Polls").document(selectedPoll)
                             .update(fieldPath, FieldValue.increment(1))
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -371,7 +369,7 @@ public class Polling extends BaseActivity {
                 } else {
                     // If the option does not exist, create and add it to the RadioGroup
                     RadioButton radioButton = new RadioButton(Polling.this);
-                    radioButton.setText(optionText);
+                    radioButton.setText(optionText + " : 0");
                     radioGroupOption.addView(radioButton);
                 }
             }
@@ -405,7 +403,7 @@ public class Polling extends BaseActivity {
         return false; // Option does not exist
     }
 
-    private void populateOptionList(){
+    private void populateOptionList() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         // Get the document reference
@@ -422,7 +420,7 @@ public class Polling extends BaseActivity {
 
                             // Calculate total response count
                             for (String key : data.keySet()) {
-                                if(!Objects.equals(key, "Description")){
+                                if (!Objects.equals(key, "Description")) {
                                     totalResponse += (Long) data.get(key);
                                 }
                             }
@@ -434,10 +432,10 @@ public class Polling extends BaseActivity {
                             if (totalResponse != 0) {
                                 for (String key : data.keySet()) {
                                     // Create a new RadioButton
-                                    if(!Objects.equals(key, "Description")) {
+                                    if (!Objects.equals(key, "Description")) {
                                         RadioButton radioButton = new RadioButton(Polling.this);
                                         radioButton.setText(key + " : " + data.get(key));
-
+                                        radioGroupOption.addView(radioButton); // Add the RadioButton to the RadioGroup
                                     }
                                 }
                             } else {
