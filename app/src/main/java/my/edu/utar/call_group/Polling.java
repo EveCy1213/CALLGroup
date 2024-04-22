@@ -78,7 +78,7 @@ public class Polling extends BaseActivity {
         setContentView(activityPollingBinding.getRoot());
         allocatedActivityTitle("POLLING");
 
-        //get id
+
         pollListView = findViewById(R.id.pollListView);
         CollectionReference pollsCollection = FirebaseFirestore.getInstance().collection("Polls");
 
