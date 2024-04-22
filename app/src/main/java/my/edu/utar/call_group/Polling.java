@@ -71,7 +71,6 @@ public class Polling extends BaseActivity {
         pollListView.setVisibility(View.VISIBLE);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +78,7 @@ public class Polling extends BaseActivity {
         setContentView(activityPollingBinding.getRoot());
         allocatedActivityTitle("POLLING");
 
+        //get id
         pollListView = findViewById(R.id.pollListView);
         CollectionReference pollsCollection = FirebaseFirestore.getInstance().collection("Polls");
 
