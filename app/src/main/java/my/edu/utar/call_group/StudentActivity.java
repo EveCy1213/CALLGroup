@@ -43,10 +43,13 @@ public class StudentActivity extends BaseActivity {
     private ListView weekListView;
     private ArrayAdapter<String> weekAdapter;
 
+
     @Override
     public void onBackPressed() {
         weekListView.setVisibility(View.VISIBLE);
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,15 @@ public class StudentActivity extends BaseActivity {
                 loadTimetableForWeek(selectedWeek);
 
                 weekListView.setVisibility(View.GONE);
+            }
+        });
+
+        Button selectWeekButton = findViewById(R.id.selectWeekButton);
+        selectWeekButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Set the visibility of weekListView to visible
+                weekListView.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -190,11 +202,11 @@ public class StudentActivity extends BaseActivity {
         int columnIndex = getColumnIndex(day);
         int startRowIndex = getRowIndex(startTime);
         int endRowIndex = getRowIndex(endTime);
+        int color = getEventColor(courseCode);
 
         if (columnIndex >= 0 && startRowIndex >= 0 && endRowIndex >= 0) {
             if (startRowIndex == endRowIndex) {
                 TableRow row = (TableRow) tableLayout.getChildAt(startRowIndex + 1);
-                int color = getEventColor(startRowIndex); // Get color for the event
                 if (row != null) {
                     TextView cell = (TextView) row.getChildAt(columnIndex);
                     if (cell != null) {
@@ -209,7 +221,6 @@ public class StudentActivity extends BaseActivity {
                     }
                 }
             } else {
-                int color = getEventColor(startRowIndex); // Get color for the event
                 for (int i = startRowIndex; i <= endRowIndex; i++) {
                     TableRow row = (TableRow) tableLayout.getChildAt(i + 1);
                     if (row != null) {
@@ -262,20 +273,29 @@ public class StudentActivity extends BaseActivity {
     }
 
     // Get color for the event
-    private int getEventColor(int rowIndex) {
+// Get color for the event based on the entire course code
+    private int getEventColor(String courseCode) {
+        // Calculate a hash code for the course code
+        int hashCode = courseCode.hashCode();
+
+        // Make sure the hash code is positive
+        if (hashCode < 0) {
+            hashCode = -hashCode;
+        }
+
+        // Get the array of event colors
         int[] eventColors = {
                 android.R.color.holo_blue_light,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light,
                 android.R.color.holo_purple,
-                android.R.color.holo_blue_light,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light,
-                android.R.color.holo_purple
         };
-        int colorIndex = rowIndex % eventColors.length;
+
+        // Use the hash code to select a color index
+        int colorIndex = hashCode % eventColors.length;
+
+        // Return the color
         return getResources().getColor(eventColors[colorIndex]);
     }
 

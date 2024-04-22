@@ -195,85 +195,88 @@ public class LecturerActivity extends BaseActivity {
         int endRowIndex = getRowIndex(endTime);
 
         if (columnIndex >= 0 && startRowIndex >= 0 && endRowIndex >= 0) {
+            int color = getEventColor(courseCode); // Get color for the event
+
             if (startRowIndex == endRowIndex) {
                 TableRow row = (TableRow) tableLayout.getChildAt(startRowIndex + 1);
                 if (row != null) {
                     TextView cell = (TextView) row.getChildAt(columnIndex);
                     if (cell != null) {
-
                         String currentText = cell.getText().toString();
                         if (!currentText.isEmpty()) {
                             currentText += "\n";
                         }
-                        cell.setText(currentText + course);
+                        cell.setText(currentText + courseCode);
                         cell.setGravity(Gravity.CENTER);
-                        cell.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-                        cell.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // Get the course name from the text of the clicked cell
-                                String courseName = ((TextView) v).getText().toString();
-
-                                // Create an intent
-                                Intent intent = new Intent(getApplicationContext(), CourseDetail.class);
-
-                                // Put the course name as an extra in the intent
-                                intent.putExtra("courseCode", courseCode);
-                                intent.putExtra("courseName", course);
-                                intent.putExtra("week", week);
-                                intent.putExtra("day", day);
-                                intent.putExtra("startTime", startTime);
-                                intent.putExtra("endTime", endTime);
-                                intent.putExtra("documentId", documentID);
-                                // Start the activity with the intent
-                                startActivity(intent);
-                            }
-                        });
+                        cell.setBackgroundColor(color);
+                        setOnClickListenerForCell(cell, courseCode, course, week, day, startTime, endTime, documentID);
                     }
                 }
             } else {
-
                 for (int i = startRowIndex; i <= endRowIndex; i++) {
                     TableRow row = (TableRow) tableLayout.getChildAt(i + 1);
                     if (row != null) {
                         TextView cell = (TextView) row.getChildAt(columnIndex);
                         if (cell != null) {
-
-                            String currentText = cell.getText().toString();
-                            if (!currentText.isEmpty()) {
-                                currentText += "\n";
-                            }
-                            cell.setText(currentText + course);
-                            //cell.setGravity(Gravity.CENTER);
-                            cell.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-                            cell.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-                            cell.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // Get the course name from the text of the clicked cell
-                                    String courseName = ((TextView) v).getText().toString();
-
-                                    // Create an intent
-                                    Intent intent = new Intent(getApplicationContext(), CourseDetail.class);
-
-                                    // Put the course name as an extra in the intent
-                                    intent.putExtra("courseCode", courseCode);
-                                    intent.putExtra("courseName", course);
-                                    intent.putExtra("week", week);
-                                    intent.putExtra("day", day);
-                                    intent.putExtra("startTime", startTime);
-                                    intent.putExtra("endTime", endTime);
-                                    intent.putExtra("documentId", documentID);
-                                    // Start the activity with the intent
-                                    startActivity(intent);
+                            String currentText = "";
+                            if (i == startRowIndex) { // Only update the first row of the event
+                                currentText = cell.getText().toString();
+                                if (!currentText.isEmpty()) {
+                                    currentText += "\n";
                                 }
-                            });
-
+                                currentText += courseCode;
+                            }
+                            cell.setText(currentText);
+                            cell.setGravity(Gravity.START);
+                            cell.setBackgroundColor(color);
+                            setOnClickListenerForCell(cell, courseCode, course, week, day, startTime, endTime, documentID);
                         }
                     }
                 }
             }
         }
+    }
+
+    private void setOnClickListenerForCell(TextView cell, String courseCode, String course, String week, String day, String startTime, String endTime, String documentID) {
+        cell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the course name from the text of the clicked cell
+                String courseName = ((TextView) v).getText().toString();
+
+                // Create an intent
+                Intent intent = new Intent(getApplicationContext(), CourseDetail.class);
+
+                // Put the course details as extras in the intent
+                intent.putExtra("courseCode", courseCode);
+                intent.putExtra("courseName", course);
+                intent.putExtra("week", week);
+                intent.putExtra("day", day);
+                intent.putExtra("startTime", startTime);
+                intent.putExtra("endTime", endTime);
+                intent.putExtra("documentId", documentID);
+
+                // Start the activity with the intent
+                startActivity(intent);
+            }
+        });
+    }
+
+    private int getEventColor(String courseCode) {
+        // Get hash code of the course code and adjust to ensure positive value
+        int colorIndex = Math.abs(courseCode.hashCode());
+
+        // Define a list of colors
+        int[] eventColors = {
+                android.R.color.holo_blue_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_purple
+        };
+
+        // Get the color from the list based on the color index
+        return getResources().getColor(eventColors[colorIndex % eventColors.length]);
     }
 
     private int getColumnIndex(String dayOfWeek) {
