@@ -160,6 +160,7 @@ public class Polling extends BaseActivity {
         radioGroupOption = findViewById(R.id.radioGroup);
         buttonAddOption = findViewById(R.id.buttonAddOption);
         textViewTitle = findViewById(R.id.textViewTitle);
+        textViewLecturer = findViewById(R.id.textViewLecturer);
         textViewDescription = findViewById(R.id.textViewDescription);
         buttonSubmit = findViewById(R.id.buttonSubmit);
 
@@ -453,19 +454,20 @@ public class Polling extends BaseActivity {
 
                             // Calculate total response count
                             for (String key : data.keySet()) {
-                                if (!Objects.equals(key, "Description")) {
+                                if (!Objects.equals(key, "Description") && !Objects.equals(key, "Lecturer")) {
                                     totalResponse += (Long) data.get(key);
                                 }
                             }
 
                             textViewTitle.setText("Response : " + totalResponse);
                             textViewDescription.setText((CharSequence) data.get("Description"));
+                            textViewLecturer.setText("Created by : " + (CharSequence) data.get("Lecturer"));
 
                             // Ensure totalResponse is not zero
                             if (totalResponse != 0) {
                                 for (String key : data.keySet()) {
                                     // Create a new RadioButton
-                                    if (!Objects.equals(key, "Description")) {
+                                    if (!Objects.equals(key, "Description") && !Objects.equals(key, "Lecturer")) {
                                         RadioButton radioButton = new RadioButton(Polling.this);
                                         radioButton.setText(key + " : " + data.get(key));
                                         radioGroupOption.addView(radioButton); // Add the RadioButton to the RadioGroup

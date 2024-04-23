@@ -3,11 +3,15 @@ package my.edu.utar.call_group;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -163,7 +167,7 @@ public class CourseDetail extends BaseActivity {
         StorageReference storageRef = storage.getReference();
 
         // Create a reference to the location where you want to save the file in Firebase Storage
-        StorageReference fileRef = storageRef.child("files/" + fileUri.getLastPathSegment());
+        StorageReference fileRef = storageRef.child("files/" + fileUri.getLastPathSegment().replace(":",""));
 
         // Upload file to Firebase Storage
         fileRef.putFile(fileUri)
@@ -200,13 +204,17 @@ public class CourseDetail extends BaseActivity {
             if (data != null && data.getData() != null) {
                 // Get the URI of the selected file
                 Uri fileUri = data.getData();
-                if (fileUri != null) { // Add null check
+                if (fileUri != null) {
+                    // Remove ":" characters from the file URI
+
                     // Upload the file to Firebase Storage
-                    uploadFileToStorage(fileUri);
+                    uploadFileToStorage(Uri.parse(fileUri.toString()));
                 }
             }
         }
     }
+
+
 
     private void populateSpinners() {
         // Dummy data for spinners

@@ -1,8 +1,11 @@
 package my.edu.utar.call_group;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.TextView;
@@ -86,31 +89,23 @@ public class CourseView extends BaseActivity {
             public void onClick(View v) {
                 // Perform the download operation here
                 Uri fileUri = Uri.parse(documentUrl);
-                String fileName = "fileUri";
-                downloadFileFromUri(fileUri, fileName);
+                downloadFileFromUri(fileUri);
             }
         });
-
-
     }
 
-    private void downloadFileFromUri(Uri fileUri, String fileName) {
+    private void downloadFileFromUri(Uri fileUri) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
 
         if (fileUri != null && !fileUri.toString().isEmpty()) {
-            // Get the file extension from the URI
-            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
+            // Get the file name from the fileUri
+            String fileNameWithExtension = new File(fileUri.getPath()).getName();
 
-            // Get the MIME type of the file
-            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
-
-            // Check if MIME type is available
-            if (mimeType != null) {
-                // Set the filename with the correct file format
-                fileName += "." + MimeTypeMap.getFileExtensionFromUrl(mimeType);
-            } else {
-                // Default to using the file extension as the format
-                fileName += "." + fileExtension;
+            // Check if the file name already contains an extension
+            if (!fileNameWithExtension.contains(".")) {
+                // If the file name doesn't contain an extension, add one based on the file type
+                String fileExtension = MimeTypeMap.getFileExtensionFromUrl(fileUri.toString());
+                fileNameWithExtension += ".pdf";
             }
 
             // Get a reference to the storage location using the file URI
@@ -118,7 +113,7 @@ public class CourseView extends BaseActivity {
 
             // Create a local file to save the downloaded file
             File localFile = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS), fileName);
+                    Environment.DIRECTORY_DOWNLOADS), fileNameWithExtension);
 
             // Start the download
             storageRef.getFile(localFile)
@@ -126,24 +121,20 @@ public class CourseView extends BaseActivity {
                         @Override
                         public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                             // File downloaded successfully
-                            Toast Toast = null;
-                            Toast.makeText(CourseView.this, "Downloaded successfully", Toast.LENGTH_SHORT).show();
-
+                            String message = "Downloaded successfully. File saved in: " + localFile.getAbsolutePath();
+                            Toast.makeText(CourseView.this, message, Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-
+                            Log.d("error", e.getMessage());
                             Toast.makeText(CourseView.this, "Download failed", Toast.LENGTH_SHORT).show();
-
                         }
                     });
-            } else {
+        } else {
             // URI not found, display message
-            Toast.makeText(CourseView.this, "File not found", Toast.LENGTH_SHORT).show();
-            }
-
-
+            Toast.makeText(CourseView.this, "No file was uploaded by lecturer", Toast.LENGTH_SHORT).show();
         }
+    }
 }

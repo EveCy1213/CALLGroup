@@ -49,8 +49,6 @@ public class StudentActivity extends BaseActivity {
         weekListView.setVisibility(View.VISIBLE);
     }
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +127,7 @@ public class StudentActivity extends BaseActivity {
                                     String remark = document.getString("Remark");
                                     String event = document.getString("Event");
                                     String documentUrl = document.getString("File Url");
-                                    if (documentUrl != null ){
+                                    if (documentUrl == null ){
                                         documentUrl = "";
                                     }
                                     updateTimetable(startTime, endTime, week, day,courseCode, courseName, event ,remark,documentUrl);
@@ -266,6 +264,7 @@ public class StudentActivity extends BaseActivity {
                 intent.putExtra("endTime", endTime);
                 intent.putExtra("remark", remark);
                 intent.putExtra("documentUrl", documentUrl);
+                Log.d("documentUrl",documentUrl);
 
                 // Start the activity with the intent
                 startActivity(intent);
